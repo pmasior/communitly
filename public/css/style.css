@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: var(--font-family-regular);
 }
 
 :root {
@@ -8,6 +9,7 @@
     --color-light: #dddddd;
     --color-medium: #aaaaaa;
     --color-dark: #555555;
+    --font-family-regular: Maven Pro, Noto Sans, Tahoma, Geneva, sans-serif;
     --transition-delay: 200ms;
 }
 
@@ -111,6 +113,7 @@ input[type="submit"] {
     border-radius: 5px;
     color: var(--color-blue);
     cursor: pointer;
+    font-weight: 500;
     padding: 0.75em 3.5em;
     transition: background var(--transition-delay),
                 color var(--transition-delay);
