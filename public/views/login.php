@@ -10,8 +10,15 @@
     <div class="container">
         <div class="logo logo-container">Communitly</div>
         <div class="login-container">
-            <form action="<!-- TODO: -->" method="post">
-                <input type="text" name='login' placeholder="Login" autofocus>
+            <form action="login" method="post">
+                <?php 
+                    if(isset($messages)) {
+                        foreach ($messages as $message) {
+                            echo $message;
+                        }
+                    }
+                ?><!-- TODO: change ↑ (wyświetlanie błędu) ↓ (usunięcie value) -->
+                <input type="text" name='login' placeholder="Login" value="example@example.com" autofocus>
                 <input type="password" name="pass" placeholder="Password">
                 <input type="submit" value="Zaloguj się">
             </form>

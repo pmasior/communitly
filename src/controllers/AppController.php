@@ -1,7 +1,13 @@
 <?php
 class AppController {
+    private $request;
+
+    public function __construct() {
+        $this->request = $_SERVER['REQUEST_METHOD'];
+    }
+
     protected function render(string $template = null, array $variables = []) {
-        $templatePath = 'public/views/' . $template . '.html';
+        $templatePath = 'public/views/' . $template . '.php';
         $output = 'File not found';  // TODO: 404
 
         if (file_exists($templatePath)) {
@@ -14,6 +20,13 @@ class AppController {
         print $output;
     }
 
+    protected function isPost() {
+        return $this->request == 'POST';
+    }
+
+    protected function isGet() {
+        return $this->request == 'GET';
+    }
 }
 
 ?>
