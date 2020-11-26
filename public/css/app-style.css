@@ -1,0 +1,326 @@
+/* Style standaryzujące (niezgodności między przeglądarkami)
+ * -----------------------------------------------------
+ */
+
+
+/* Style podstawowe (punkt wyjścia do budowania bardziej wyspecjalizowanych stylów)
+ * -----------------------------------------------------
+ */
+
+:root {
+    --color-blue: #4d7cfe;
+    --color-white: #ffffff;
+    --color-light: #dddddd;
+    --color-medium: #aaaaaa;
+    --color-dark: #555555;
+    --font-family-regular: Maven Pro, Noto Sans, Tahoma, Geneva, sans-serif;
+    --font-awesome: "Font Awesome 5 Free";
+    --transition-delay: 200ms;
+}
+
+::selection {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Maven Pro'), 
+         url("/public/font/MavenPro-Regular.woff2"), 
+         url("/public/font/MavenPro-Regular.ttf")
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: local('Maven Pro'), 
+         url("/public/font/MavenPro-Medium.woff2"), 
+         url("/public/font/MavenPro-Medium.ttf")
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Maven Pro'), 
+         url("/public/font/MavenPro-Bold.woff2"), 
+         url("/public/font/MavenPro-Bold.ttf")
+}
+
+@font-face {
+    font-family: "Nanum Pen Script";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Nanum Pen Script'), 
+         url("/public/font/NanumPenScript-Regular.woff2"), 
+         url("/public/font/NanumPenScript-Regular.ttf")
+}
+
+@font-face {
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 400;
+    font-display: auto;
+    src: local("Font Awesome 5 Free"),
+         url("/public/font/fa-regular-400.woff2"),
+         url("/public/font/fa-regular-400.ttf");
+}
+
+@font-face {
+    font-family: "Font Awesome 5 Free";
+    font-style: normal;
+    font-weight: 900;
+    font-display: auto;
+    src: local("Font Awesome 5 Free Bold"),
+         url("/public/font/fa-solid-900.woff2"),
+         url("/public/font/fa-solid-900.ttf");
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    color: var(--color-dark);
+    font-family: var(--font-family-regular);
+    margin: 0;
+}
+
+header {
+    padding: 2rem 2rem 0 2rem;
+}
+
+nav {
+    padding: 2rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-blue);
+    font-weight: 500;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-delay);
+}
+ 
+a:active,
+a:focus, 
+a:hover {
+    color: var(--color-blue);
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+}
+
+main {
+    padding: 2rem;
+}
+
+
+/* Style komponentów i ich kontenerów
+ * -----------------------------------------------------
+ */
+
+.account-menu-link::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f2bd";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.account-menu-link:hover::before {
+    font-weight: 400;
+}
+
+.archive-link {
+    color: var(--color-medium);
+}
+
+.dashboard-menu-link::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f249";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.dashboard-menu-link:hover::before {
+    font-weight: 400;
+}
+
+.group-name {
+    color: var(--color-medium);
+}
+
+.group-name::after {
+    content: "→";
+}
+
+.subgroup-menu-link::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f1ce";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.logo {
+    color: var(--color-blue);
+    font: 3.2vw 'Nanum Pen Script';
+}
+
+.left-aside {
+    border-right: 1px solid var(--color-light);
+}
+
+.main-title {
+    font-size: 1.25vw;
+}
+
+.menu-group-name {
+    color: var(--color-medium);
+    display: inline-block;
+    font-weight: 500;
+    padding-bottom: 0.2rem;
+    padding-top: 1.5rem;
+}
+
+.menu-link {
+    display: inline-block;
+    padding: 0.2rem 0;
+}
+
+.statement-date-and-source {
+    color: var(--color-medium);
+    margin: 0.4rem 0;
+}
+
+.widget {
+    border-radius: 5px;
+    box-shadow: 0 0 15px 2px var(--color-light);
+    padding: 1rem;
+}
+
+.widget-group-title {
+    color: var(--color-medium);
+}
+
+.record-in-links {
+    padding: 0.3rem 0;
+}
+
+.record-in-links a::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0c1";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.record-in-links p {
+    color: var(--color-medium);
+    padding-left: 1.4rem;
+}
+
+.record-in-links p:hover {
+    color: var(--color-dark);
+}
+
+
+/* Style strukturalne (układ strony)
+ * -----------------------------------------------------
+ */
+
+body {
+    display: grid;
+    grid-template-areas: 
+        "aside main";
+    grid-template-columns: 1fr 5fr;
+
+}
+
+aside {
+    display: grid;
+    grid-area: aside;
+    grid-template-areas: 
+        "logo"
+        "nav";
+    grid-template-rows: min-content auto;
+    height: 100vh;
+}
+
+main {
+    display: grid;
+    gap: 1rem 3rem;
+    grid-area: main;
+    grid-template-areas: 
+        "main-title main-title"
+        "statements links";
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: min-content auto;
+}
+
+.gap {
+    flex-grow: 1;
+}
+
+.main-title {
+    grid-area: main-title;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.statements {
+    display: flex;
+    flex-direction: column;
+    grid-area: statements;
+    row-gap: 1rem;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    grid-area: links;
+    row-gap: 1rem;
+}
+
+
+/* Style narzędziowe (JS)
+ * -----------------------------------------------------
+ */
+
+
+/* Style charakterystyczne dla przeglądarek
+ * ----------------------------------------------------- 
+ */
+
+
