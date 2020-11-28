@@ -7,40 +7,41 @@
     <title>Communitly - dashboard</title>
 </head>
 <body>
-    <aside class="left-aside">
+    <div class="header-and-nav">
         <header>
             <a class="logo" href="/">Communitly</a>
         </header>
         <nav>
+            <button class="hamburger-menu-icon"></button>
             <ul class="nav-menu">
-                <li><a class="dashboard-menu-link" href="dashboard">Dashboard</a></li>
-                <li><a class="menu-group-name" href="#">PK WIiT Informatyka 3 rok</a></li>
-                <li><a class="subgroup-menu-link menu-link" href="wdpai">WdPAI</a></li>
+                <li><a class="dashboard menu-link" href="dashboard">Dashboard</a></li>
+                <li><a class="menu-group" href="#">PK WIiT Informatyka 3 rok</a></li>
+                <li><a class="subgroup menu-link" href="wdpai">WdPAI</a></li>
                 <p class="gap"></p>
-                <li><a class="account-menu-link menu-link" href="settings">Paweł</a></li>
+                <li><a class="account menu-link" href="settings">Paweł</a></li>
             </ul>
         </nav>
-    </aside>
+    </div>
     <main>
         <div class="main-title">
             <h1>Wstęp do projektowania aplikacji internetowych</h1>
         </div>
         <div class="statements">
-            <h3 class="widget-group-title">Komunikaty</h3>
+            <h3 class="widget-group">Komunikaty</h3>
             <div class="widget">
                 <h2>Lorem ipsum</h2>
-                <p class="statement-date-and-source">
+                <p class="date-and-source">
                     26.10.2020 13:45 z 
                     <a href="https://example.com">example.com</a>
                 </p>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro sint temporibus magni cupiditate similique corrupti saepe, voluptatibus reprehenderit tenetur amet, excepturi sequi optio perspiciatis laborum ea consequuntur libero provident numquam ad magnam voluptatum vel dolorem. Eos quibusdam dignissimos dolore maiores numquam sapiente nihil. Animi harum necessitatibus, fugiat facere voluptatum iure. Quae sapiente quos, ullam vel quo distinctio esse id in eos repellat dolorem suscipit tenetur labore, ab consequuntur eligendi aspernatur veniam soluta. Dolorem inventore iste totam doloremque eligendi at nesciunt eveniet consequuntur sequi provident beatae magni, dignissimos ut, voluptate modi sapiente mollitia! Repudiandae consectetur blanditiis voluptatum vitae modi nemo rem?</p>
             </div>
             <div class="widget">
-                <h3><a class="archive-link" href="#">Zobacz zarchiwizowane komunikaty</a></h3>
+                <h3><a class="archived" href="#">Zobacz zarchiwizowane komunikaty</a></h3>
             </div>
         </div>
         <div class="links">
-            <h3 class="widget-group-title">Linki</h3>
+            <h3 class="widget-group">Linki</h3>
             <div class="widget">
                 <h2>Wykłady</h2>
                 <ul>
