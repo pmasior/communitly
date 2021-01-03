@@ -10,6 +10,7 @@ Routing::get('index', 'DefaultController');  // TODO: usunąć, jeśli niepotrze
 Routing::get('dashboard', 'DefaultController');
 Routing::get('wdpai', 'DefaultController');
 Routing::post('login', 'SecurityController');
+Routing::post('addStatement', 'StatementController');
 Routing::run($path);
 
 ?>

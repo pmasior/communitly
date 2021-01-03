@@ -2,6 +2,16 @@
  * -----------------------------------------------------
  */
 
+input, 
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+input:invalid {
+    box-shadow: none;
+}
+
 
 /* Style podstawowe (punkt wyjścia do budowania bardziej wyspecjalizowanych stylów)
  * -----------------------------------------------------
@@ -9,6 +19,7 @@
 
 :root {
     --color-blue: #4d7cfe;
+    --color-error: #ea4335;
     --color-white: #ffffff;
     --color-light: #dddddd;
     --color-medium: #aaaaaa;
@@ -91,6 +102,7 @@
 body {
     color: var(--color-dark);
     font-family: var(--font-family-regular);
+    font-size: 1em;
     margin: 0;
 }
 
@@ -251,6 +263,16 @@ ul {
 }
 
 
+/* TODO: ikona przed linkiem do dodania komunikatu */
+    .add-content::before {
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+        content: "\f2bd";
+        display: inline-block;
+        width: 1.4rem;
+    }
+
+
 /* statement */
 .main-title {
     font-size: 1.25vw;
@@ -279,6 +301,58 @@ ul {
     color: var(--color-medium);
 }
 
+/* TODO: inputy */
+    /* form {
+        padding: 1.5rem;
+    } */
+
+    input[type="text"], 
+    input[type="url"], 
+    input[type="file"],
+    textarea {
+        background: transparent;
+        border: none;
+        color: var(--color-dark);
+        margin-bottom: 1em;
+        padding: 10px;
+        width: 100%;
+    }
+
+    input[type="text"],
+    input[type="url"], 
+    textarea {
+        border-bottom: 2px solid var(--color-light);
+        transition: border-bottom var(--transition-delay);
+    }
+
+    input[type="text"]:focus, 
+    input[type="url"]:focus, 
+    textarea:focus {
+        border-bottom-color: var(--color-blue);
+    }
+
+    input:invalid {
+        border-bottom-color: var(--color-error);
+    }
+
+    input[type="submit"] {
+        background: transparent;
+        border: 2px solid var(--color-blue);
+        border-radius: 5px;
+        color: var(--color-blue);
+        cursor: pointer;
+        font-weight: 500;
+        padding: 0.75em 3.5em;
+        transition: background var(--transition-delay),
+                    color var(--transition-delay);
+    }
+
+    input[type="submit"]:hover {
+        background: var(--color-blue);
+        color: var(--color-white);
+    }
+
+
 
 /* links */
 .record-in-links {
@@ -301,6 +375,42 @@ ul {
 .record-in-links p:hover {
     color: var(--color-dark);
 }
+
+
+/* TODO: dialog z dodawaniem komunikatu */
+    /* body {
+        filter: blur(5px);
+    } */
+
+    /* .dialog-background {
+    /* .dialog::before { */
+    /*
+        background: #5555558c;
+        display: none;
+    } */
+
+    /* .dialog {
+        background: var(--color-white);
+        border-radius: 5px;
+        box-shadow: 0 0 15px 2px var(--color-light);
+        padding: 1.5rem;
+    } */
+
+    /* a.add-content:focus ~ .dialog-background,
+    .dialog:focus * ~ .dialog-background {
+        display: block;
+        background: var(--color-blue);
+    } */
+
+    /* .add textarea ~ input {
+        display: none;
+    } */
+
+    /* .add:hover ~ input,
+    .add *:focus ~ input,
+    .add *:hover ~ input {
+        display: block;
+    } */
 
 
 /* Style strukturalne (układ strony)
@@ -436,12 +546,37 @@ main {
     row-gap: 1rem;
 }
 
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
 .links {
     display: flex;
     flex-direction: column;
     grid-area: links;
     row-gap: 1rem;
 }
+
+/* TODO: dialog z dodawaniem komunikatu */
+    /* .dialog-background {
+    /* .dialog::before { *//*
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+    }
+
+    .dialog {
+        /* height: 90vh; *//*
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 80vw;
+    } */
 
 
 /* Style narzędziowe (JS)

@@ -27,7 +27,28 @@
             <h1>Wstęp do projektowania aplikacji internetowych</h1>
         </div>
         <div class="statements">
-            <h3 class="widget-group">Komunikaty</h3>
+            <!-- TODO: zmienić dodawanie komunikatu -->
+            <!-- <div class="widget-group-header"> -->
+                <h3 class="widget-group">Komunikaty</h3>
+                <a href="#" class="add-content">sfff</a>
+            <!-- </div> -->
+            <div class="widget add">
+                <form action="addStatement" method="post" enctype="multipart/form-data">
+                    <?php 
+                    echo '1234567';
+                        if(isset($messages)) {
+                            foreach ($messages as $message) {
+                                echo $message;
+                            }
+                        }
+                    ?><!-- TODO: change ↑ (wyświetlanie błędu) ↓ (usunięcie value) -->
+                    <input type="text" name='statement-header' placeholder="Nagłówek">
+                    <textarea name="statement-content" placeholder="Treść nowego komunikatu" autofocus></textarea>
+                    <input type="file" name="attachment">
+                    <input type="submit" value="Wyślij wiadomość">
+                </form>
+
+            </div>
             <div class="widget">
                 <h2>Lorem ipsum</h2>
                 <p class="date-and-source">
@@ -39,6 +60,28 @@
             <div class="widget">
                 <h3><a class="archived" href="#">Zobacz zarchiwizowane komunikaty</a></h3>
             </div>
+
+            <!-- TODO: delete dialog -->
+            <!-- <div class="dialog-background">
+                <div class="dialog">
+                    <form action="login" method="post" enctype="multipart/form-data">
+                        <?php 
+                            if(isset($messages)) {
+                                foreach ($messages as $message) {
+                                    echo $message;
+                                }
+                            }
+                        ?><!-- TODO: change ↑ (wyświetlanie błędu) ↓ (usunięcie value) --><!--
+                        <input type="text" name='statement-header' placeholder="Nagłówek">
+                        <input type="url" name='statement-url' placeholder="Link do źródła">
+                        <textarea name="statement-content" placeholder="Treść komunikatu" autofocus></textarea>
+                        <input type="file" name="attachment">
+                        <input type="submit" value="Wyślij wiadomość">
+                        <inp
+                    </form>
+                </div>
+            </div>
+ -->
         </div>
         <div class="links">
             <h3 class="widget-group">Linki</h3>
@@ -54,6 +97,22 @@
                     </li>
                     <li class="record-in-links">
                         <a href="https://example.com">Materiały z zajęć (www)</a>
+                    </li>
+                    <li class="record-in-links">
+                        <!-- TODO: zmienić styl, zmienić action="" -->
+                        <form action="login" method="post" enctype="multipart/form-data">
+                            <?php 
+                                if(isset($messages)) {
+                                    foreach ($messages as $message) {
+                                        echo $message;
+                                    }
+                                }
+                            ?><!-- TODO: change ↑ (wyświetlanie błędu) ↓ (usunięcie value) -->
+                            <input type="url" name='link-url' placeholder="Link">
+                            <input type="text" name='link-header' placeholder="Nazwa">
+                            <textarea name="link-note" placeholder="Notatka"></textarea>
+                            <input type="submit" value="Wyślij wiadomość">
+                        </form>
                     </li>
                 </ul>
             </div>
