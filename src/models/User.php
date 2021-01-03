@@ -3,13 +3,15 @@
 class User {
     private $email;
     private $password;
-    private $name;
+    private $firstname;
+    private $lastname;
 
     public function __construct(string $email, string $password, 
-                                string $name) {
+                                string $firstname, string $lastname) {
         $this->email = $email;
         $this->password = $password;
-        $this->name = $name;
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
     }
 
     public function getEmail():string {
@@ -20,8 +22,12 @@ class User {
         return $this->password;
     }
 
-    public function getName():string {
-        return $this->name;
+    public function getFirstname():string {
+        return $this->firstname;
+    }
+
+    public function getLastname():string {
+        return $this->lastname;
     }
 
     public function setEmail(string $email) {
@@ -32,8 +38,12 @@ class User {
         $this->password = $password;
     }
 
-    public function setName(string $name) {
-        $this->name = $name;
+    public function setFirstname(string $firstname) {
+        $this->firstname = $firstname;
+    }
+
+    public function setLastname(string $lastname) {
+        $this->lastname = $lastname;
     }
 
     // TODO: delete unnecessary methods

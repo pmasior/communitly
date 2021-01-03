@@ -1,2 +1,5 @@
+# ignore file with database credentials
+config.php
+
 # ignore files uploaded by users
 public/uploads
