@@ -12,15 +12,11 @@ class SecurityController extends AppController {
         $email = $_POST['login'];
         $pass = $_POST['pass'];
 
-        $user = $userRepository->getUser($email);
-        if (!$user) {
+        try {
+            $user = $userRepository->getUser($email);
+        } catch (Exception $e) {  // TODO: change type of exception
             return $this->render('login', ['messages' => ['User with this email not exist']]);
         }
-        
-        if ($user->getEmail() !== $email) {
-            return $this->render('login', ['messages' => ['User with this email not exist']]);
-        }
-        // TODO: usuń niepotrzebne
         
         if ($user->getPassword() !== $pass) {
             return $this->render('login', ['messages' => ['Wrong password']]);

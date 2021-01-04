@@ -1,6 +1,7 @@
 <?php
 require_once 'AppController.php';
 require_once __DIR__ . '/../models/Statement.php';
+require_once __DIR__ . '/../repository/StatementRepository.php';
 
 class StatementController extends AppController {
     const MAX_FILE_SIZE = 1024 * 1024;
@@ -36,7 +37,12 @@ class StatementController extends AppController {
     ];
     const UPLOAD_DIRECTORY = '/public/uploads/'; // TODO: poprawne?
     private $messages = [];
+    private $statementRepository;
 
+    public function __construct() {
+        parent::__construct();
+        $this->statementRepository = new StatementRepository();
+    }
 
     public function addStatement() {
         if ($this->isPost() && is_uploaded_file($_FILES['attachment']['tmp_name']) && $this->validate($_FILES['attachment'])) {
@@ -45,6 +51,7 @@ class StatementController extends AppController {
             // return $this->render('wdpai', ['messages' -> $this->messages]);
         }
         $statement = new Statement($_POST['statement-header'], $_POST['statement-content'], $_FILES['attachment']['name']);
+        $this->statementRepository->addStatement($statement);
         $this->render('wdpai', ['messages' => $this->messages, 'statement' => $statement]);
     }
 
