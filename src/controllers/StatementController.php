@@ -52,7 +52,7 @@ class StatementController extends AppController {
         }
         $statement = new Statement($_POST['statement-header'], $_POST['statement-content'], $_FILES['attachment']['name']);
         $this->statementRepository->addStatement($statement);
-        $this->render('wdpai', ['messages' => $this->messages, 'statement' => $statement]);
+        $this->render('wdpai', ['messages' => $this->messages, 'statements' => $this->statementRepository->getStatements()]);
     }
 
     private function validate(array $file): bool {
@@ -66,4 +66,13 @@ class StatementController extends AppController {
         }
         return true;
     }
+
+
+
+
+    public function wdpai() {  // TODO: display_dashboard
+        $statements = $this->statementRepository->getStatements();
+        $this->render('wdpai', ['statements' => $statements]);
+    }
+
 }

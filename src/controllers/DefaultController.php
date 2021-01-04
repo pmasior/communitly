@@ -10,10 +10,6 @@ class DefaultController extends AppController {
     public function dashboard() {  // TODO: display_dashboard
         $this->render('dashboard');
     }
-
-    public function wdpai() {  // TODO: display_dashboard
-        $this->render('wdpai');
-    }
 }
 
 ?>

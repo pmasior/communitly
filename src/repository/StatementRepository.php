@@ -44,12 +44,41 @@ class StatementRepository extends Repository {
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
     
-    private function convertDatabaseResultToStatement(array $statement): User {
+    private function convertDatabaseResultToStatement(array $statement): Statement {
         return new Statement(
             $statement['title'], 
             $statement['content'], 
             ' '
         );
+    }
+
+
+
+
+
+    public function getStatements(): array {
+        $statements = $this->fetchStatementsFromDatabase();
+        return $this->convertDatabaseResultToStatements($statements);
+    }
+
+    private function fetchStatementsFromDatabase() {
+        $stmt = $this->database->connect()->prepare('
+            SELECT * FROM public.statements;
+        ');
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    private function convertDatabaseResultToStatements(array $statements): array {
+        $result = [];
+        foreach ($statements as $statement) {
+            $result[] = new Statement(
+                $statement['title'], 
+                $statement['content'], 
+                ' '
+            );
+        }
+        return $result;
     }
 }
 
