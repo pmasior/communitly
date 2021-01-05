@@ -583,6 +583,10 @@ form {
  * -----------------------------------------------------
  */
 
+.js-input-invalid  {
+    border-bottom-color: var(--color-error);
+}
+
 
 /* Style charakterystyczne dla przeglądarek
  * ----------------------------------------------------- 

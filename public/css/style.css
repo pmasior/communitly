@@ -5,6 +5,7 @@
 
 :root {
     --color-blue: #4d7cfe;
+    --color-error: #ea4335;
     --color-white: #ffffff;
     --color-light: #dddddd;
     --color-medium: #aaaaaa;
@@ -143,4 +144,10 @@ input[type="submit"]:hover {
     form {
         width: 90%;
     }
+}
+
+
+
+.js-input-invalid  {
+    border-bottom-color: var(--color-error) !important;
 }
