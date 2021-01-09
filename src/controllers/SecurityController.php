@@ -10,27 +10,61 @@ class SecurityController extends AppController {
         $this->userRepository = new UserRepository();
     }
 
-    public function login() {
+    public function signIn() {
         if (!$this->isPost()) {
-            return $this->render('login');
+            header('Location: /');
         }
 
+        $email = $_POST['email'];
+        $password = $_POST['pass'];
+
         try {
-            $user = $this->userRepository->getUser($_POST['email']);
+            $user = $this->userRepository->getUser($email);
         } catch (Exception $e) {  // TODO: change type of exception
             return $this->render('login', ['messages' => ['User with this email not exist']]);
         }
-        
-        if ($user->getPassword() !== $_POST['pass']) {
+
+        if (!password_verify($password, $user->getPassword())) {
             return $this->render('login', ['messages' => ['Wrong password']]);
         }
 
-        session_start();  // TODO: delete?
-        // $_SESSION['user'] = $user;
         $_SESSION['email'] = $user->getEmail();
-        $_SESSION['id_users'] = $user->getUserId();
-        $_SESSION['user_first_name'] = $user->getFirstname();
-
+        $_SESSION['userId'] = $user->getUserId();
+        $_SESSION['userFirstName'] = $user->getFirstname();
         header('Location: /dashboard');
+    }
+
+    public function signUp() {
+        if (!$this->isPost()) {
+            header('Location: /');
+        }
+
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $confirmedPassword = $_POST['confirmedPassword'];
+        $firstName = $_POST['firstName'];
+        $lastName = $_POST['lastName'];
+
+        if ($password !== $confirmedPassword) {
+            return $this->render('register', ['messages' => ['Passwords are different']]);
+        }
+
+        $password = password_hash($password, PASSWORD_DEFAULT);
+        $user = new User(
+            NULL,
+            $email,
+            $password,
+            $firstName,
+            $lastName
+        );
+
+        $this->userRepository->addUser($user);
+        header('Location: /');
+    }
+
+    public function logout() {
+        session_unset();
+        session_destroy();
+        return $this->render('login', ['messages' => ['You have been successfully logged out']]);
     }
 }

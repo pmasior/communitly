@@ -12,15 +12,18 @@
     <!-- TODO: przycisk do rejestracji -->
         <div class="logo logo-container">Communitly</div>
         <div class="login-container">
-            <form action="signIn" method="post">
+            <form action="signUp" method="post">
                 <input type="text" name='email' placeholder="Login" value="example@example.com" autofocus>  <!-- TODO: delete value -->
-                <input type="password" name="pass" placeholder="Password">  <!-- TODO: change pass -> password -->
+                <input type="password" name="password" placeholder="Password">  <!-- TODO: change pass -> password -->
+                <input type="password" name="confirmedPassword" placeholder="Confirm password">  <!-- TODO: change pass -> password -->
+                <input type="text" name="firstName" placeholder="First name">  <!-- TODO: change pass -> password -->
+                <input type="text" name="lastName" placeholder="Last name">  <!-- TODO: change pass -> password -->
                 <?php if(isset($messages)): ?>
                     <?php foreach ($messages as $message): ?>
                         <span class="error"><?= $message; ?></span>
                     <?php endforeach; ?>
                 <?php endif; ?>
-                <input type="submit" value="Zaloguj się">
+                <input type="submit" value="Zarejestruj się">
             </form>
         </div>
     </div>

@@ -147,6 +147,10 @@ input[type="submit"]:hover {
 }
 
 
+.error {
+    color: var(--color-error);
+    padding: 0.5em 0;
+}
 
 .js-input-invalid  {
     border-bottom-color: var(--color-error) !important;

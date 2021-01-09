@@ -49,14 +49,16 @@ class StatementController extends AppController {
 
     public function addStatement() {
         if (!$this->isPost() || !$this->isValidateStatement()) {
-            return $this->render('dashboard');
+            header('Location: /dashboard');
         }
 
         $statement = $this->createStatementInstance();
         $statementId = $this->statementRepository->addStatement($statement);
 
-        foreach ($_POST['thread'] as $thread) {
-            $this->statementRepository->associateStatementWithThread($statementId, $thread);
+        if ($_POST['thread']) {
+            foreach ($_POST['thread'] as $thread) {
+                $this->statementRepository->associateStatementWithThread($statementId, $thread);
+            }
         }
 
         for ($i = 0; $i < count($_FILES['attachment']['tmp_name']); $i++) {
@@ -83,7 +85,7 @@ class StatementController extends AppController {
             $_POST['statement-header'], 
             $_POST['statement-content'], 
             new DateTime(), 
-            $_SESSION['id_users'], 
+            $_SESSION['userId'],
             // NULL, 
             // NULL, 
             // $_FILES['attachment']['name'], 
@@ -126,13 +128,4 @@ class StatementController extends AppController {
         }
         return true;
     }
-
-
-
-
-    // public function wdpai() {  // TODO: display_dashboard
-    //     $statements = $this->statementRepository->getStatements();
-    //     $this->render('wdpai', ['statements' => $statements]);
-    // }  // TODO: usunąc
-
 }

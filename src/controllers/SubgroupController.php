@@ -15,9 +15,9 @@ class SubgroupController extends AppController {
     }
 
     public function subgroup($subgroupId) {
-        $groupsInMenu = $this->groupRepository->getGroups($_SESSION['id_users']);
-        $displayedSubgroup = $this->groupRepository->getSubgroup($_SESSION['id_users'], $subgroupId);
-        $statements = $this->statementRepository->getStatements($_SESSION['id_users'], $subgroupId);
+        $groupsInMenu = $this->groupRepository->getGroups($_SESSION['userId']);
+        $displayedSubgroup = $this->groupRepository->getSubgroup($_SESSION['userId'], $subgroupId);
+        $statements = $this->statementRepository->getStatements($_SESSION['userId'], $subgroupId);
         $allThreadsInSubgroup = $this->groupRepository->getThreadsForSubgroup($subgroupId);
 
         $this->render('subgroup', [
@@ -30,8 +30,9 @@ class SubgroupController extends AppController {
     }
 
     public function dashboard() {
-        $userFirstname = $_SESSION['user_first_name'];
-        $groupsInMenu = $this->groupRepository->getGroups($_SESSION['id_users']);
+        $userFirstname = $_SESSION['userFirstName'];
+        $groupsInMenu = $this->groupRepository->getGroups($_SESSION['userId']);
+        
         $this->render('dashboard', [
             'userFirstname' => $userFirstname,
             'groups' => $groupsInMenu

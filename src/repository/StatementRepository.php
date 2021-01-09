@@ -19,7 +19,7 @@ class StatementRepository extends Repository {
                 $statement->getHeader(),  // TODO: fix empty string
                 $statement->getContent(),
                 $statement->getCreationDate()->format('d.m.Y H:i:s'),
-                $_SESSION['id_users'],
+                $_SESSION['userId'],
                 $statement->getSourceURL()
             ]
             );
@@ -59,28 +59,15 @@ class StatementRepository extends Repository {
         return $queryResult['associate_statement_with_thread'];
     }
 
-    public function getStatement(string $idStatement): ?User {
-        $statement = $this->selectStatementFromDatabase($idStatement);
-        if (!$statement) {
-            throw new Exception('Statement with this id not exist');  // TODO: własna klasa dla wyjątku
-        }
-        return $this->convertDatabaseResultToStatement($statement);
-    }
-
-    public function getStatements(?string $userId=NULL, ?string $subgroupId=NULL): array {  //TODO: usunąć tymczasową zgodność
-        // if (!$userId && !$subgroupId) {
-        //     $statements = $this->selectStatementsFromDatabase();
-        //     return $this->convertDatabaseResultToStatements($statements);
-        // }
-        // $queryResult = $this->selectStatementsFromDatabase($userId, $subgroupId);
+    public function getStatements($userId, $subgroupId): array {
         $queryResult = $this->select(
             self::SELECT_STATEMENTS_FOR_USER_AND_SUBGROUP,
             [
                 $userId, 
                 $subgroupId
             ]
-            );
-        $statements = $this->convertDatabaseResultToStatements($queryResult);
+        );
+        $statements = $this->convertDatabaseResultToObjects($queryResult, 'Statement');
         foreach ($statements as $statement) {
             $queryResult = $this->select(
                 self::SELECT_ATTACHMENTS_FOR_STATEMENT,
@@ -88,7 +75,7 @@ class StatementRepository extends Repository {
                     $statement->getStatementId()
                 ]
             );
-            $attachments = $this->convertDatabaseResultToAttachments($queryResult);
+            $attachments = $this->convertDatabaseResultToObjects($queryResult, 'Attachment');
             foreach ($attachments as $attachment) {
                 $statement->addAttachment($attachment);
             }
@@ -96,60 +83,16 @@ class StatementRepository extends Repository {
         return $statements;
     }
 
-    private function selectStatementsFromDatabase(?string $userId=NULL, ?string $subgroupId=NULL): array {  //TODO: usunąć tymczasową zgodność
-        $query = '
-            -- lista komunikatów dla wątków, do których należy użytkownik
-            SELECT *
-            FROM public.statements
-                INNER JOIN public.statements_threads
-                    USING (id_statements)
-                INNER JOIN public.threads
-                    USING (id_threads)
-            WHERE id_threads IN
-                (SELECT DISTINCT users_threads.id_threads
-                FROM public.threads
-                    INNER JOIN public.users_threads
-                        USING (id_threads)
-                    INNER JOIN public.users
-                        USING (id_users)
-                WHERE id_subgroups=:id_subgroups AND id_users=:id_users);
-        ';
-        $stmt = $this->database->connect()->prepare($query);
-        $stmt->bindParam(':id_subgroups', $subgroupId, PDO::PARAM_INT);
-        $stmt->bindParam(':id_users', $userId, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-
-    private function selectStatementFromDatabase(string $idStatement): ?array {
-        $statement = $this->database->connect()->prepare('
-            SELECT * FROM public.statements WHERE id_statements = :id_statements
-        ');
-        $statement->bindParam(':id_statements', $idStatement, PDO::PARAM_INT);
-        $statement->execute();
-        return $statement->fetch(PDO::FETCH_ASSOC);
-    }
-
-    // private function selectStatementsFromDatabase() {
-    //     $stmt = $this->database->connect()->prepare('
-    //         SELECT * FROM public.statements;
-    //     ');
-    //     $stmt->execute();
-    //     return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // }
-
-
-    private function convertDatabaseResultToStatements(array $statements): array {
+    private function convertDatabaseResultToObjects(array $records, string $convertTo): array {
+        $convert = 'convertTo' . $convertTo;
         $result = [];
-        foreach ($statements as $statement) {
-            $result[] = $this->convertDatabaseResultToStatement($statement);
+        foreach ($records as $record) {
+            $result[] = $this->$convert($record);
         }
         return $result;
     }
     
-    private function convertDatabaseResultToStatement(array $statement): Statement {
-        // print_r($statement);
-        // throw new Exception('debug');
+    private function convertToStatement(array $statement): Statement {
         return new Statement(
             $statement['id_statements'],
             $statement['title'], 
@@ -162,17 +105,8 @@ class StatementRepository extends Repository {
             $statement['source_url'] ?: null,
         );
     }
-
-
-    private function convertDatabaseResultToAttachments(array $attachments): array {
-        $result = [];
-        foreach ($attachments as $attachment) {
-            $result[] = $this->convertDatabaseResultToAttachment($attachment);
-        }
-        return $result;
-    }
     
-    private function convertDatabaseResultToAttachment(array $attachment): Attachment {
+    private function convertToAttachment(array $attachment): Attachment {
         return new Attachment(
             $attachment['id_attachments'],
             $attachment['filename'], 
@@ -181,5 +115,4 @@ class StatementRepository extends Repository {
         );
     }
 }
-
 ?>

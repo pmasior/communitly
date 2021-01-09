@@ -16,7 +16,8 @@
                 <?php endforeach; ?>
             <?php endforeach; ?>
             <p class="gap"></p>
-            <li><a class="account menu-link" href="/settings"><?= $_SESSION['user_first_name'];?></a></li>
+            <li><a class="account menu-link" href="/settings"><?= $_SESSION['userFirstName'];?></a></li>
+            <li><a class="account menu-link" href="/logout">Wyloguj</a></li> <!-- TODO: move to /settings -->
         </ul>
     </nav>
 </div>
