@@ -5,9 +5,16 @@ class User {
     private $password;
     private $firstname;
     private $lastname;
+    private $userId;
 
-    public function __construct(string $email, string $password, 
-                                string $firstname, string $lastname) {
+    public function __construct(
+        int $userId, 
+        string $email, 
+        string $password, 
+        string $firstname, 
+        string $lastname
+    ) {
+        $this->userId = $userId;
         $this->email = $email;
         $this->password = $password;
         $this->firstname = $firstname;
@@ -28,6 +35,10 @@ class User {
 
     public function getLastname():string {
         return $this->lastname;
+    }
+
+    public function getUserId() {
+        return $this->userId;
     }
 
     public function setEmail(string $email) {

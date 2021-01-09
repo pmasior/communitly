@@ -1,5 +1,6 @@
 <?php
 require_once 'AppController.php';
+require_once __DIR__ . '/../models/File.php';
 require_once __DIR__ . '/../models/Statement.php';
 require_once __DIR__ . '/../repository/StatementRepository.php';
 
@@ -36,31 +37,90 @@ class StatementController extends AppController {
         'image/gif'  //gif
     ];
     const UPLOAD_DIRECTORY = '/public/uploads/'; // TODO: poprawne?
+    private $relativeUploadDirectory;
     private $messages = [];
     private $statementRepository;
 
     public function __construct() {
         parent::__construct();
         $this->statementRepository = new StatementRepository();
+        $this->relativeUploadDirectory = dirname(dirname(__DIR__)) . self::UPLOAD_DIRECTORY;
     }
 
     public function addStatement() {
-        if ($this->isPost() && is_uploaded_file($_FILES['attachment']['tmp_name']) && $this->validate($_FILES['attachment'])) {
-            move_uploaded_file($_FILES['attachment']['tmp_name'], dirname(dirname(__DIR__)) . self::UPLOAD_DIRECTORY . $_FILES['attachment']['name']);
-            
-            // return $this->render('wdpai', ['messages' -> $this->messages]);
+        if (!$this->isPost() || !$this->isValidateStatement()) {
+            return $this->render('dashboard');
         }
-        $statement = new Statement($_POST['statement-header'], $_POST['statement-content'], $_FILES['attachment']['name']);
-        $this->statementRepository->addStatement($statement);
-        $this->render('wdpai', ['messages' => $this->messages, 'statements' => $this->statementRepository->getStatements()]);
+
+        $statement = $this->createStatementInstance();
+        $statementId = $this->statementRepository->addStatement($statement);
+
+        foreach ($_POST['thread'] as $thread) {
+            $this->statementRepository->associateStatementWithThread($statementId, $thread);
+        }
+
+        for ($i = 0; $i < count($_FILES['attachment']['tmp_name']); $i++) {
+            if ($_FILES['attachment']['error'][$i] == UPLOAD_ERR_OK) {
+                $file = $this->createFileInstance($i);
+                if ($this->moveFile($file)) {
+                    $attachmentId = $this->statementRepository->addAttachment($file, $statementId);
+                }
+            }
+        }
+
+        header('Location: /dashboard');
     }
 
-    private function validate(array $file): bool {
-        if ($file['size'] > self::MAX_FILE_SIZE) {
+    private function isValidateStatement() {
+        return $_POST['statement-header']
+            && $_POST['statement-content']
+            && $_POST['statement-url'];
+    }
+
+    private function createStatementInstance() {
+        return new Statement(
+            NULL,
+            $_POST['statement-header'], 
+            $_POST['statement-content'], 
+            new DateTime(), 
+            $_SESSION['id_users'], 
+            // NULL, 
+            // NULL, 
+            // $_FILES['attachment']['name'], 
+            $_POST['statement-url']
+        );
+    }
+
+    private function createFileInstance($i) {
+        return new File(
+            $_FILES['attachment']['name'][$i],
+            $_FILES['attachment']['type'][$i],
+            $_FILES['attachment']['tmp_name'][$i], 
+            $_FILES['attachment']['error'][$i],
+            $_FILES['attachment']['size'][$i]
+        );
+    }
+
+    private function moveFile($file): bool {
+        if ($this->isFilesizeValid($file->getSize())
+            && $this->isFiletypeSupported($file->getType())
+            && is_uploaded_file($file->getTmpName())
+            ) {
+            return move_uploaded_file($file->getTmpName(), $this->relativeUploadDirectory . $file->getName());
+        }
+    }
+
+    private function isFilesizeValid($size): bool {
+        if ($size > self::MAX_FILE_SIZE) {
             $this->messages[] = 'File is too large for upload';
             return false;
         }
-        if (!isset($file['type']) && !in_array($file['type'], self::SUPPORTED_FILE_TYPES)) {
+        return true;
+    }
+
+    private function isFiletypeSupported(string $type): bool {
+        if (!isset($type) 
+            && !in_array($type, self::SUPPORTED_FILE_TYPES)) {
             $this->messages[] = 'File type is not supported';
             return false;
         }
@@ -70,9 +130,9 @@ class StatementController extends AppController {
 
 
 
-    public function wdpai() {  // TODO: display_dashboard
-        $statements = $this->statementRepository->getStatements();
-        $this->render('wdpai', ['statements' => $statements]);
-    }
+    // public function wdpai() {  // TODO: display_dashboard
+    //     $statements = $this->statementRepository->getStatements();
+    //     $this->render('wdpai', ['statements' => $statements]);
+    // }  // TODO: usunąc
 
 }

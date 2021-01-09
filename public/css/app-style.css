@@ -13,6 +13,7 @@ input:invalid {
 }
 
 
+
 /* Style podstawowe (punkt wyjścia do budowania bardziej wyspecjalizowanych stylów)
  * -----------------------------------------------------
  */
@@ -20,6 +21,7 @@ input:invalid {
 :root {
     --color-blue: #4d7cfe;
     --color-error: #ea4335;
+    --color-warning: #da9c00;
     --color-white: #ffffff;
     --color-light: #dddddd;
     --color-medium: #aaaaaa;
@@ -139,6 +141,21 @@ ul {
     padding: 0;
 }
 
+input,
+textarea {
+    background: transparent;
+    border: none;
+    color: var(--color-dark);
+    margin-bottom: 1em;
+    padding: 10px;
+}
+
+input[type="checkbox"] {
+    margin: initial;
+    padding: initial;
+}
+
+
 
 
 /* Style komponentów i ich kontenerów
@@ -252,6 +269,18 @@ ul {
 
 
 /* widget */
+.add-content::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0fe";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.add-content:hover::before {
+    font-weight: 400;
+}
+
 .widget {
     border-radius: 5px;
     box-shadow: 0 0 15px 2px var(--color-light);
@@ -262,15 +291,10 @@ ul {
     color: var(--color-medium);
 }
 
-
-/* TODO: ikona przed linkiem do dodania komunikatu */
-    .add-content::before {
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        content: "\f2bd";
-        display: inline-block;
-        width: 1.4rem;
-    }
+.widget-group-header {
+    display: flex;
+    justify-content: space-between;
+}
 
 
 /* statement */
@@ -294,11 +318,49 @@ ul {
 
 .date-and-source {
     color: var(--color-medium);
-    margin: 0.4rem 0;
+    margin: 0.2rem 0;
 }
 
 .archived {
     color: var(--color-medium);
+}
+
+.unverified-statement::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--color-warning);
+    content: "\f06a";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.verified-statement::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: var(--color-blue);
+    content: "\f058";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.verified-statement:hover::before {
+    font-weight: 400;
+}
+
+.attachment::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f0c6";
+    display: inline-block;
+    width: 1.4rem;
+}
+
+.attachment {
+    margin: 0.2rem 0;
+}
+
+.statement-content {
+    margin: 0.2rem 0;
 }
 
 /* TODO: inputy */
@@ -306,52 +368,40 @@ ul {
         padding: 1.5rem;
     } */
 
-    input[type="text"], 
-    input[type="url"], 
-    input[type="file"],
-    textarea {
-        background: transparent;
-        border: none;
-        color: var(--color-dark);
-        margin-bottom: 1em;
-        padding: 10px;
-        width: 100%;
-    }
+.input-with-text {
+    border-bottom: 2px solid var(--color-light);
+    transition: border-bottom var(--transition-delay);
+    width: 100%;
+}
+    
+.input-with-text:focus {
+    border-bottom-color: var(--color-blue);
+}
+    
+.button {
+    background: transparent;
+    border: 2px solid var(--color-blue);
+    border-radius: 5px;
+    color: var(--color-blue);
+    cursor: pointer;
+    font-weight: 500;
+    padding: 0.75em 3.5em;
+    transition: background var(--transition-delay),
+                color var(--transition-delay);
+}
 
-    input[type="text"],
-    input[type="url"], 
-    textarea {
-        border-bottom: 2px solid var(--color-light);
-        transition: border-bottom var(--transition-delay);
-    }
+.button:hover {
+    background: var(--color-blue);
+    color: var(--color-white);
+}
 
-    input[type="text"]:focus, 
-    input[type="url"]:focus, 
-    textarea:focus {
-        border-bottom-color: var(--color-blue);
-    }
+.button-in-form {
+    align-self: flex-end;
+}
 
-    input:invalid {
-        border-bottom-color: var(--color-error);
-    }
-
-    input[type="submit"] {
-        background: transparent;
-        border: 2px solid var(--color-blue);
-        border-radius: 5px;
-        color: var(--color-blue);
-        cursor: pointer;
-        font-weight: 500;
-        padding: 0.75em 3.5em;
-        transition: background var(--transition-delay),
-                    color var(--transition-delay);
-    }
-
-    input[type="submit"]:hover {
-        background: var(--color-blue);
-        color: var(--color-white);
-    }
-
+.checkbox-in-form {
+    width: min-content;
+}
 
 
 /* links */
@@ -377,40 +427,20 @@ ul {
 }
 
 
-/* TODO: dialog z dodawaniem komunikatu */
-    /* body {
-        filter: blur(5px);
-    } */
+/* dialog */
+.dialog-background {
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity var(--transition-delay);
+}
 
-    /* .dialog-background {
-    /* .dialog::before { */
-    /*
-        background: #5555558c;
-        display: none;
-    } */
+.dialog {
+    background: var(--color-white);
+    border-radius: 5px;
+    box-shadow: 0 0 15px 2px var(--color-light);
+    padding: 1.5rem;
+}
 
-    /* .dialog {
-        background: var(--color-white);
-        border-radius: 5px;
-        box-shadow: 0 0 15px 2px var(--color-light);
-        padding: 1.5rem;
-    } */
-
-    /* a.add-content:focus ~ .dialog-background,
-    .dialog:focus * ~ .dialog-background {
-        display: block;
-        background: var(--color-blue);
-    } */
-
-    /* .add textarea ~ input {
-        display: none;
-    } */
-
-    /* .add:hover ~ input,
-    .add *:focus ~ input,
-    .add *:hover ~ input {
-        display: block;
-    } */
 
 
 /* Style strukturalne (układ strony)
@@ -549,7 +579,7 @@ main {
 form {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 .links {
@@ -559,33 +589,54 @@ form {
     row-gap: 1rem;
 }
 
-/* TODO: dialog z dodawaniem komunikatu */
-    /* .dialog-background {
-    /* .dialog::before { *//*
-        position: fixed;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-    }
+.button {
+    width: auto;
+}
 
+.dialog-background {
+    /* display: none; */
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.dialog {
+    display: none;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+}
+
+@media only screen and (max-width: 768px) {
     .dialog {
-        /* height: 90vh; *//*
-        left: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        width: 80vw;
-    } */
+        width: 90vw;
+    }
+}
 
 
 /* Style narzędziowe (JS)
  * -----------------------------------------------------
  */
 
-.js-input-invalid  {
+.js-input-invalid {
     border-bottom-color: var(--color-error);
 }
+
+.js-show-dialog {
+    display: block;
+}
+
+.js-show-dialog-background {
+    visibility: visible;
+    opacity: 1;
+}
+
+
 
 
 /* Style charakterystyczne dla przeglądarek

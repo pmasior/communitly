@@ -7,24 +7,10 @@
     <title>Communitly - dashboard</title>
 </head>
 <body>
-<div class="header-and-nav">
-        <header>
-            <a class="logo" href="/">Communitly</a>
-        </header>
-        <nav>
-            <button class="hamburger-menu-icon"></button>
-            <ul class="nav-menu">
-                <li><a class="dashboard menu-link" href="dashboard">Dashboard</a></li>
-                <li><a class="menu-group" href="#">PK WIiT Informatyka 3 rok</a></li>
-                <li><a class="subgroup menu-link" href="wdpai">WdPAI</a></li>
-                <p class="gap"></p>
-                <li><a class="account menu-link" href="settings">Paweł</a></li>
-            </ul>
-        </nav>
-    </div>
+    <?php include('header-and-nav.php'); ?>
     <main>
         <div class="main-title">
-            <h1>Witaj Paweł</h1>
+            <h1>Witaj <?= $userFirstname;?>!</h1>
         </div>
         <div class="statements">
             <h3 class="widget-group">Nowe komunikaty</h3>

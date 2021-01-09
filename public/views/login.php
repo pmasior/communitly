@@ -9,6 +9,7 @@
 </head>
 <body>
     <div class="container">
+    <!-- TODO: przycisk do rejestracji -->
         <div class="logo logo-container">Communitly</div>
         <div class="login-container">
             <form action="login" method="post">
@@ -19,7 +20,7 @@
                         }
                     }
                 ?><!-- TODO: change ↑ (wyświetlanie błędu) ↓ (usunięcie value) -->
-                <input type="text" name='login' placeholder="Login" value="example@example.com" autofocus>
+                <input type="text" name='email' placeholder="Login" value="example@example.com" autofocus>
                 <input type="password" name="pass" placeholder="Password">  <!-- TODO: change pass -> password -->
                 <input type="submit" value="Zaloguj się">
             </form>

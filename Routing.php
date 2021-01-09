@@ -2,6 +2,7 @@
 require_once 'src/controllers/DefaultController.php';
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/StatementController.php';
+require_once 'src/controllers/SubgroupController.php';
 
 class Routing {
     public static $routes;
@@ -15,16 +16,23 @@ class Routing {
     }
 
     public static function run($url) {
-        $action = explode('/', $url)[0];
+        $urlParts = explode('/', $url); 
+        $action = $urlParts[0];
 
         if(!array_key_exists($action, self::$routes)) {
             die("Wrong url!");  // TODO: 404
         }
 
-        $controller = self::$routes[$action];
-        $object = new $controller;
+        $controllerClass = self::$routes[$action];
+        $object = new $controllerClass;
         $action = $action ?: 'index';
-        $object->$action();
+
+        $id = $urlParts[1] ?? '';
+        // if (strcmp($action, 'subgroup') == 0) {
+            // $object->$action(explode('/', $url)[1]);
+        // throw new Exception('debug' . explode('/', $url)[1] . 'debug');
+        // }
+        $object->$action($id);
 
     }
 }
