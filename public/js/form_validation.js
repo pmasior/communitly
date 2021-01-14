@@ -4,6 +4,8 @@ const loginInput = form.querySelector('input[name="login"]');
 const passwordInput = form.querySelector('input[name="pass"]');
 const confirmPasswordInput = form.querySelector('input[name="pass222222"]'); // TODO: dodać pole w html i ustawić tu name=""
 
+// TODO: fix showing error in .html
+
 function isEmail(email) {
     return /\S+@\S+.\S+/.test(email);
     // return false;

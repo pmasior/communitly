@@ -19,7 +19,7 @@ class SecurityController extends AppController {
         $password = $_POST['pass'];
 
         try {
-            $user = $this->userRepository->getUser($email);
+            $user = $this->userRepository->getUserForEmail($email);
         } catch (Exception $e) {  // TODO: change type of exception
             return $this->render('login', ['messages' => ['User with this email not exist']]);
         }
@@ -31,6 +31,7 @@ class SecurityController extends AppController {
         $_SESSION['email'] = $user->getEmail();
         $_SESSION['userId'] = $user->getUserId();
         $_SESSION['userFirstName'] = $user->getFirstname();
+        $_SESSION['userLastName'] = $user->getLastname();
         header('Location: /dashboard');
     }
 

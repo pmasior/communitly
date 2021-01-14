@@ -69,6 +69,10 @@ class StatementRepository extends Repository {
         );
         $statements = $this->convertDatabaseResultToObjects($queryResult, 'Statement');
         foreach ($statements as $statement) {
+            // TODO: przyspieszyć/zmiejszyć liczbę zapytań do bazy
+                // tablica z kluczami i wartościami dla statements
+                // $tablicaResult = SELECT attachments, statements FROM ... WHERE id_attachments IN (SELECT statements for user)
+                // przypisanie każdego attachments z $tablicaResult do odpowiedniego statement
             $queryResult = $this->select(
                 self::SELECT_ATTACHMENTS_FOR_STATEMENT,
                 [

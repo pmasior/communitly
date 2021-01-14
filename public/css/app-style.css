@@ -2,7 +2,7 @@
  * -----------------------------------------------------
  */
 
-input, 
+input,
 textarea {
     font-family: inherit;
     font-size: inherit;
@@ -41,9 +41,9 @@ input:invalid {
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: local('Maven Pro'), 
-         url("/public/font/MavenPro-Regular.woff2"), 
-         url("/public/font/MavenPro-Regular.ttf")
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Regular.woff2"),
+    url("/public/font/MavenPro-Regular.ttf")
 }
 
 @font-face {
@@ -51,9 +51,9 @@ input:invalid {
     font-style: normal;
     font-weight: 500;
     font-display: swap;
-    src: local('Maven Pro'), 
-         url("/public/font/MavenPro-Medium.woff2"), 
-         url("/public/font/MavenPro-Medium.ttf")
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Medium.woff2"),
+    url("/public/font/MavenPro-Medium.ttf")
 }
 
 @font-face {
@@ -61,9 +61,9 @@ input:invalid {
     font-style: normal;
     font-weight: 700;
     font-display: swap;
-    src: local('Maven Pro'), 
-         url("/public/font/MavenPro-Bold.woff2"), 
-         url("/public/font/MavenPro-Bold.ttf")
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Bold.woff2"),
+    url("/public/font/MavenPro-Bold.ttf")
 }
 
 @font-face {
@@ -71,29 +71,9 @@ input:invalid {
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: local('Nanum Pen Script'), 
-         url("/public/font/NanumPenScript-Regular.woff2"), 
-         url("/public/font/NanumPenScript-Regular.ttf")
-}
-
-@font-face {
-    font-family: "Font Awesome 5 Free";
-    font-style: normal;
-    font-weight: 400;
-    font-display: auto;
-    src: local("Font Awesome 5 Free"),
-         url("/public/font/fa-regular-400.woff2"),
-         url("/public/font/fa-regular-400.ttf");
-}
-
-@font-face {
-    font-family: "Font Awesome 5 Free";
-    font-style: normal;
-    font-weight: 900;
-    font-display: auto;
-    src: local("Font Awesome 5 Free Bold"),
-         url("/public/font/fa-solid-900.woff2"),
-         url("/public/font/fa-solid-900.ttf");
+    src: local('Nanum Pen Script'),
+    url("/public/font/NanumPenScript-Regular.woff2"),
+    url("/public/font/NanumPenScript-Regular.ttf")
 }
 
 * {
@@ -128,9 +108,9 @@ a {
     text-decoration: none;
     transition: color var(--transition-delay);
 }
- 
+
 a:active,
-a:focus, 
+a:focus,
 a:hover {
     color: var(--color-blue);
 }
@@ -161,6 +141,16 @@ input[type="checkbox"] {
 /* Style komponentów i ich kontenerów
  * -----------------------------------------------------
  */
+
+* > .fa-hover-show,
+*:hover > .fa-hover-hidden {
+    display: none;
+}
+
+*:hover > .fa-hover-show {
+    display: inline-block;
+}
+
 
 /* header */
 .logo {
@@ -198,12 +188,6 @@ input[type="checkbox"] {
         background: none;
         display: inline;
     }
-
-    .hamburger-menu-icon::before {
-        font-family: "Font Awesome 5 Free";
-        font-weight: 900;
-        content: "\f0c9";
-    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -211,7 +195,6 @@ input[type="checkbox"] {
         background: var(--color-white);
         border-right: 1px solid var(--color-light);
         box-shadow: 0 0 15px 2px var(--color-light);
-        transform: translateX(-100vw);
         transition: transform var(--transition-delay);
     }
 }
@@ -224,39 +207,7 @@ input[type="checkbox"] {
 }
 
 .menu-link.account {
-    padding-top: 1.5rem;
-}
-
-.menu-link.account::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f2bd";
-    display: inline-block;
-    width: 1.4rem;
-}
-
-.menu-link.account:hover::before {
-    font-weight: 400;
-}
-
-.menu-link.dashboard::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f249";
-    display: inline-block;
-    width: 1.4rem;
-}
-
-.menu-link.dashboard:hover::before {
-    font-weight: 400;
-}
-
-.menu-link.subgroup::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f1ce";
-    display: inline-block;
-    width: 1.4rem;
+    margin-top: 1.5rem;
 }
 
 .menu-group {
@@ -267,20 +218,19 @@ input[type="checkbox"] {
     padding-top: 1.5rem;
 }
 
+/* main */
+
+.main-title {
+    font-size: 1.25vw;
+}
+
+@media only screen and (max-width: 768px) {
+    .main-title {
+        font-size: 1rem;
+    }
+}
 
 /* widget */
-.add-content::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f0fe";
-    display: inline-block;
-    width: 1.4rem;
-}
-
-.add-content:hover::before {
-    font-weight: 400;
-}
-
 .widget {
     border-radius: 5px;
     box-shadow: 0 0 15px 2px var(--color-light);
@@ -297,87 +247,28 @@ input[type="checkbox"] {
 }
 
 
-/* statement */
-.main-title {
-    font-size: 1.25vw;
-}
-
-@media only screen and (max-width: 768px) {
-    .main-title {
-        font-size: 1rem;
-    }
-}
-
-.group {
-    color: var(--color-medium);
-}
-
-.group::after {
-    content: "→";
-}
-
-.date-and-source {
-    color: var(--color-medium);
-    margin: 0.2rem 0;
-}
-
-.archived {
-    color: var(--color-medium);
-}
-
-.unverified-statement::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    color: var(--color-warning);
-    content: "\f06a";
-    display: inline-block;
-    width: 1.4rem;
-}
-
-.verified-statement::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    color: var(--color-blue);
-    content: "\f058";
-    display: inline-block;
-    width: 1.4rem;
-}
-
-.verified-statement:hover::before {
-    font-weight: 400;
-}
-
-.attachment::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f0c6";
-    display: inline-block;
-    width: 1.4rem;
-}
-
-.attachment {
-    margin: 0.2rem 0;
-}
-
-.statement-content {
-    margin: 0.2rem 0;
-}
-
 /* TODO: inputy */
-    /* form {
-        padding: 1.5rem;
-    } */
+/* form {
+    padding: 1.5rem;
+} */
+
+/* form */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
 .input-with-text {
     border-bottom: 2px solid var(--color-light);
     transition: border-bottom var(--transition-delay);
     width: 100%;
 }
-    
+
 .input-with-text:focus {
     border-bottom-color: var(--color-blue);
 }
-    
+
 .button {
     background: transparent;
     border: 2px solid var(--color-blue);
@@ -388,6 +279,7 @@ input[type="checkbox"] {
     padding: 0.75em 3.5em;
     transition: background var(--transition-delay),
                 color var(--transition-delay);
+    width: auto;
 }
 
 .button:hover {
@@ -401,29 +293,6 @@ input[type="checkbox"] {
 
 .checkbox-in-form {
     width: min-content;
-}
-
-
-/* links */
-.record-in-links {
-    padding: 0.3rem 0;
-}
-
-.record-in-links a::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f0c1";
-    display: inline-block;
-    width: 1.4rem;
-}
-
-.record-in-links p {
-    color: var(--color-medium);
-    padding-left: 1.4rem;
-}
-
-.record-in-links p:hover {
-    color: var(--color-dark);
 }
 
 
@@ -449,14 +318,14 @@ input[type="checkbox"] {
 
 body {
     display: grid;
-    grid-template-areas: 
+    grid-template-areas:
         "header-and-nav main";
     grid-template-columns: 1fr 5fr;
 }
 
 @media only screen and (max-width: 768px) {
     body {
-        grid-template-areas: 
+        grid-template-areas:
             "header-and-nav"
             "main";
         grid-template-columns: 1fr;
@@ -466,7 +335,7 @@ body {
 .header-and-nav {
     display: grid;
     grid-area: header-and-nav;
-    grid-template-areas: 
+    grid-template-areas:
         "logo"
         "nav";
     grid-template-rows: min-content auto;
@@ -478,7 +347,7 @@ body {
 
 @media only screen and (max-width: 768px) {
     .header-and-nav {
-        grid-template-areas: 
+        grid-template-areas:
             "nav logo";
         grid-template-columns: min-content auto;
         height: auto;
@@ -529,6 +398,7 @@ nav {
         position: absolute;
         left: 0;
         top: 0;
+        transform: translateX(-100vw);
         width: 80vw;
         z-index: 1;
     }
@@ -541,60 +411,9 @@ nav {
     }
 }
 
-main {
-    display: grid;
-    gap: 1rem 3rem;
-    grid-area: main;
-    grid-template-areas: 
-        "main-title main-title"
-        "statements links";
-    grid-template-columns: 3fr 1fr;
-    grid-template-rows: min-content auto;
-    padding: 2rem;
-}
 
-@media only screen and (max-width: 768px) {
-    main {
-        grid-template-areas: 
-            "main-title"
-            "statements"
-            "links";
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(3, min-content);
-        padding: 1rem;
-    }
-}
-
-.main-title {
-    grid-area: main-title;
-}
-
-.statements {
-    display: flex;
-    flex-direction: column;
-    grid-area: statements;
-    row-gap: 1rem;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.links {
-    display: flex;
-    flex-direction: column;
-    grid-area: links;
-    row-gap: 1rem;
-}
-
-.button {
-    width: auto;
-}
-
+/* dialog */
 .dialog-background {
-    /* display: none; */
     visibility: hidden;
     position: fixed;
     top: 0;
@@ -619,6 +438,8 @@ form {
 }
 
 
+
+
 /* Style narzędziowe (JS)
  * -----------------------------------------------------
  */
@@ -635,12 +456,3 @@ form {
     visibility: visible;
     opacity: 1;
 }
-
-
-
-
-/* Style charakterystyczne dla przeglądarek
- * ----------------------------------------------------- 
- */
-
-

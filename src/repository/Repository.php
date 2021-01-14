@@ -24,6 +24,10 @@ class Repository {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    protected function update($query, array $arguments) {
+        return $this->insert($query, $arguments);
+    }
+
     // TODO: pomyśleć o tym, aby istniała tylko jedna instancja tego obiektu np. Singleton
 }
 

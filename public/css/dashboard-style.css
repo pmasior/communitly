@@ -1,0 +1,106 @@
+
+/* Style komponentów i ich kontenerów
+ * -----------------------------------------------------
+ */
+
+/* statement */
+.archived,
+.group-name,
+.date-and-source {
+    color: var(--color-medium);
+}
+
+.unverified-statement {
+    color: var(--color-warning);
+}
+
+.verified-statement {
+    color: var(--color-blue);
+}
+
+.widget p {
+    margin: 0.3rem 0;
+}
+
+/* links */
+.record-in-links {
+    padding: 0.2rem 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .record-in-links {
+        padding: 0.3rem 0;
+    }
+}
+
+.record-in-links p {
+    color: var(--color-medium);
+    padding-left: 1.3rem;
+}
+
+.record-in-links p:hover {
+    color: var(--color-dark);
+}
+
+
+
+
+/* Style strukturalne (układ strony)
+ * -----------------------------------------------------
+ */
+
+main {
+    display: grid;
+    gap: 1rem 3rem;
+    grid-area: main;
+    grid-template-areas:
+        "main-title main-title"
+        "statements links";
+    grid-template-columns: 3fr 1fr;
+    grid-template-rows: min-content auto;
+    padding: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+    main {
+        grid-template-areas:
+            "main-title"
+            "statements"
+            "links";
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, min-content);
+        padding: 1rem;
+    }
+}
+
+.main-title {
+    grid-area: main-title;
+}
+
+.statements {
+    display: flex;
+    flex-direction: column;
+    grid-area: statements;
+    row-gap: 1rem;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    grid-area: links;
+    row-gap: 1rem;
+}
+
+
+
+
+/* Style narzędziowe (JS)
+ * -----------------------------------------------------
+ */
+
+
+
+
+/* Style charakterystyczne dla przeglądarek
+ * -----------------------------------------------------
+ */

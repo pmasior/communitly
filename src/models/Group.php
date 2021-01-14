@@ -43,5 +43,9 @@ class Group {
     public function addSubgroups(Subgroup $subgroup) {
         $this->subgroups[] = $subgroup;
     }
+
+    public function setSubgroups(array $subgroups) {
+        $this->subgroups = $subgroups;
+    }
 }
 ?>

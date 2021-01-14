@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/all.css">
     <link rel="stylesheet" type="text/css" href="/public/css/app-style.css">
-    <script type="text/javascript" src="/public/js/script.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="/public/css/dashboard-style.css">
+    <script type="text/javascript" src="/public/js/form_validation.js" defer></script>
     <script type="text/javascript" src="/public/js/dialog.js" defer></script>
     <title>Communitly - subgroup</title>
 </head>
@@ -17,19 +19,21 @@
         <div class="statements">
             <div class="widget-group-header">
                 <h3 class="widget-group">Komunikaty</h3>
-                <a href="#" class="add-content js-add-content"></a>
+                <a href="#" class="js-dialog-activator">
+                    <i class="fas fa-plus-square fa-hover-hidden"></i>
+                    <i class="far fa-plus-square fa-hover-show"></i>
+                </a>
             </div>
 
             <div class="dialog-background js-dialog-background"></div>
             <div class="dialog js-dialog">
-                <h1>Dodawanie komunikatu</h2>
+                <h1>Dodawanie komunikatu</h1>
                 <h4>
-                    <span class="group"><?= $group->getFullName(); ?></span>
+                    <span class="group-name"><?= $group->getFullName(); ?></span>
                     <span class="subgroup"><a href="wdpai"><?= $subgroup->getFullName(); ?></a></span>
                 </h4>
                 <form action="/addStatement" method="post" enctype="multipart/form-data">
-                    <?php 
-                    echo '1234567';
+                    <?php
                         if(isset($messages)) {
                             foreach ($messages as $message) {
                                 echo $message;
@@ -59,9 +63,13 @@
                         <?php
                         $approveDate = $statement->getApproveDate();
                         if ($approveDate) {
-                            echo "<span class='verified-statement' title='Dodane " . $statement->getCreationDate()->format('d.m.Y H:i:s') . " przez ?\nZweryfikowane " . $approveDate->format('d.m.Y H:i:s') . " przez ?'></span>";
+                            echo "<span title='Dodane " . $statement->getCreationDate()->format('d.m.Y H:i:s') . " przez ?\nZweryfikowane " . $approveDate->format('d.m.Y H:i:s') . " przez ?'>
+                                    <i class='fas fa-check-circle verified-statement'></i>
+                                    </span>";
                         } else {
-                            echo "<span class='unverified-statement' title='Dodane " . $statement->getCreationDate()->format('d.m.Y H:i:s') . " przez ?\n'></span>";
+                            echo "<span title='Dodane " . $statement->getCreationDate()->format('d.m.Y H:i:s') . " przez ?\n'></span>
+                                    <i class='fas fa-exclamation-circle unverified-statement'></i>
+                                    </span>";
                         }
                         ?>
 
@@ -76,9 +84,12 @@
                         </a>
 
                     </p>
-                    <p class="statement-content"><?= $statement->getContent(); ?></p>
+                    <p><?= $statement->getContent(); ?></p>
                     <?php foreach ($statement->getAttachments() as $attachment): ?>
-                        <a href="<?= '/public/uploads/' . $attachment->getFilename(); ?>" class="attachment"><?= $attachment->getFilename(); ?></a>
+                        <a href="<?= '/public/uploads/' . $attachment->getFilename(); ?>" class="attachment">
+                            <i class="fas fa-paperclip"></i>
+                            <?= $attachment->getFilename(); ?>
+                        </a>
                 <?php endforeach; ?>
                 </div>
             <?php endforeach; ?>
@@ -95,14 +106,23 @@
                 <h2>Wykłady</h2>
                 <ul>
                     <li class="record-in-links">
-                        <a href="https://example.com">Zdalne wykłady (app)</a>
+                        <a href="https://example.com">
+                            <i class="fa fa-link"></i>
+                            Zdalne wykłady (app)
+                        </a>
                         <!-- TODO: dodać odpowiednie kolory dla ikon [JavaScript] -->
                     </li>
                     <li class="record-in-links">
-                        <a href="https://example.com">Zdalne wykłady (www)</a>
+                        <a href="https://example.com">
+                            <i class="fa fa-link"></i>
+                            Zdalne wykłady (www)
+                        </a>
                     </li>
                     <li class="record-in-links">
-                        <a href="https://example.com">Materiały z zajęć (www)</a>
+                        <a href="https://example.com">
+                            <i class="fa fa-link"></i>
+                            Materiały z zajęć (www)
+                        </a>
                     </li>
                     <li class="record-in-links">
                         <!-- TODO: zmienić styl, zmienić action="" -->
@@ -126,13 +146,22 @@
                 <h2>Laboratoria</h2>
                 <ul>
                     <li class="record-in-links">
-                        <a href="https://example.com">Zdalne laboratoria (Zoom)</a>
+                        <a href="https://example.com">
+                            <i class="fa fa-link"></i>
+                            Zdalne laboratoria (Zoom)
+                        </a>
                     </li>
                     <li class="record-in-links">
-                        <a href="https://example.com">Materiały z zajęć (www)</a>
+                        <a href="https://example.com">
+                            <i class="fa fa-link"></i>
+                            Materiały z zajęć (www)
+                        </a>
                     </li>
                     <li class="record-in-links">
-                        <a href="mailto:example@example.com">Przesyłanie zadań (email)</a>
+                        <a href="mailto:example@example.com">
+                            <i class="fa fa-link"></i>
+                            Przesyłanie zadań (email)
+                        </a>
                         <p>Na adres email: example@example.com<br>
                         Temat i nazwa pliku: [_] Imie Nazwisko</p>
                     </li>

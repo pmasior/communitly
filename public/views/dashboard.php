@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/public/css/all.css">
     <link rel="stylesheet" type="text/css" href="/public/css/app-style.css">
+    <link rel="stylesheet" type="text/css" href="/public/css/dashboard-style.css">
     <title>Communitly - dashboard</title>
 </head>
 <body>
@@ -16,8 +18,8 @@
             <h3 class="widget-group">Nowe komunikaty</h3>
             <div class="widget">
                 <p>
-                    <span class="group">PK WIiT Informatyka 3 rok</span>
-                    <span class="subgroup"><a href="wdpai">Wstęp do projektowania aplikacji internetowych</a></span>
+                    <span class="group-name">PK WIiT Informatyka 3 rok → </span>
+                    <span><a href="wdpai">Wstęp do projektowania aplikacji internetowych</a></span>
                 </p>
                 <h2>Lorem ipsum</h2>
                 <p class="date-and-source">
@@ -31,7 +33,7 @@
             <h3 class="widget-group">Nowe powiadomienia</h3>
             <div class="widget">
                 <p>
-                    <span class="group">PK WIiT Informatyka 3 rok</span>
+                    <span class="group-name">PK WIiT Informatyka 3 rok</span>
                     <span class="subgroup"><a href="wdpai">WdPAI</a></span>
                 </p>
                 <h2> Nowy link</h2>
