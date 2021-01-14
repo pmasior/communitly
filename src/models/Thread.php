@@ -6,7 +6,7 @@ class Thread {
     private $name;
 
     public function __construct(
-        string $threadId,
+        ?string $threadId,
         string $subgroupId, 
         string $name
     ) {

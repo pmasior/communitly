@@ -7,7 +7,7 @@ class Subgroup {
     private $threads = [];
 
     public function __construct(
-        string $subgroupId,
+        ?string $subgroupId,
         string $fullName, 
         string $shortName
     ) {

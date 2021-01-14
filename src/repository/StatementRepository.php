@@ -11,20 +11,36 @@ class StatementRepository extends Repository {
     const SELECT_ATTACHMENTS_FOR_STATEMENT = 'SELECT * FROM select_attachments_for_statement(?);';
     const ASSOCIATE_STATEMENT_WITH_THREAD = 'SELECT associate_statement_with_thread(?, ?);';
     const SELECT_STATEMENTS_FOR_USER_AND_SUBGROUP = 'SELECT * FROM select_statements_for_user_and_subgroup(?, ?);';
+    const CHANGE_STATEMENT = 'SELECT * FROM change_statement(?, ?, ?, ?, ?, ?);';
 
     public function addStatement(Statement $statement) {
         $queryResult = $this->insert(
-            self::INSERT_STATEMENT, 
+            self::INSERT_STATEMENT,
             [
                 $statement->getHeader(),  // TODO: fix empty string
                 $statement->getContent(),
-                $statement->getCreationDate()->format('d.m.Y H:i:s'),
+                $statement->getCreationDate()->format('d.m.Y H:i:s'),  // TODO: check data format, ponżej poprawny?
                 $_SESSION['userId'],
                 $statement->getSourceURL()
             ]
-            );
+        );
         return $queryResult['insert_statement'];
         // TODO: approve_date, id_approve_user
+    }
+
+    public function editStatement(Statement $statement) {
+        $queryResult = $this->update(
+            self::CHANGE_STATEMENT,
+            [
+                $statement->getStatementId(),
+                $statement->getHeader(),
+                $statement->getContent(),
+                $statement->getCreationDate()->format('Y-m-d H:i:s'),
+                $_SESSION['userId'],
+                $statement->getSourceURL()
+            ]
+        );
+        return $queryResult['change_statement'];
     }
 
     public function addAttachment($file, $statementId) {

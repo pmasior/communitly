@@ -11,6 +11,7 @@ class UserRepository extends Repository {
     const CHANGE_PASSWORD_FOR_USER_ID = 'SELECT * FROM change_password_for_user_id(?, ?);';
     const CHANGE_FIRST_NAME_FOR_USER_ID = 'SELECT * FROM change_first_name_for_user_id(?, ?);';
     const CHANGE_LAST_NAME_FOR_USER_ID = 'SELECT * FROM change_last_name_for_user_id(?, ?);';
+    const SELECT_PERMISSIONS_FOR_USER = 'SELECT * FROM select_permissions_for_user(?);';
 
     public function addUser(User $user) {
         $queryResult = $this->insert(
@@ -79,6 +80,14 @@ class UserRepository extends Repository {
         return $queryResult['change_last_name_for_user_id'];
     }
 
+    public function getPermissions($userId) {
+        $queryResult = $this->select(
+            self::SELECT_PERMISSIONS_FOR_USER,
+            [$userId]
+        );
+        return $this->convertToPermissionArray($queryResult);
+    }
+
     private function convertDatabaseResultToObjects(array $records, string $convertTo): array {
         $convert = 'convertTo' . $convertTo;
         $result = [];
@@ -96,6 +105,14 @@ class UserRepository extends Repository {
             $queryResult['first_name'],
             $queryResult['last_name']
         );
+    }
+
+    private function convertToPermissionArray(array $queryResult): array {
+        $result = [];
+        foreach ($queryResult as $permission) {
+            $result[$permission['id_groups']] = $permission['id_users_types'];
+        }
+        return $result;
     }
 }
 ?>

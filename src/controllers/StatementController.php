@@ -73,6 +73,33 @@ class StatementController extends AppController {
         header('Location: /dashboard');
     }
 
+    public function editStatement() {
+        if (!$this->isPost() || !$this->isValidateStatement()) {
+            header('Location: /dashboard');
+        }
+
+        $statement = $this->createStatementInstance();
+        $statementId = $this->statementRepository->editStatement($statement);
+
+        if ($_POST['thread']) {
+            foreach ($_POST['thread'] as $thread) {
+                $this->statementRepository->associateStatementWithThread($statementId, $thread);
+            }
+        }
+
+        for ($i = 0; $i < count($_FILES['attachment']['tmp_name']); $i++) {
+            if ($_FILES['attachment']['error'][$i] == UPLOAD_ERR_OK) {
+                $file = $this->createFileInstance($i);
+                if ($this->moveFile($file)) {
+                    $attachmentId = $this->statementRepository->addAttachment($file, $statementId);
+                }
+            }
+        }
+
+        header('Location: /dashboard');
+
+    }
+
     private function isValidateStatement() {
         return $_POST['statement-header']
             && $_POST['statement-content']
@@ -81,7 +108,7 @@ class StatementController extends AppController {
 
     private function createStatementInstance() {
         return new Statement(
-            NULL,
+            $_POST['statementId'],
             $_POST['statement-header'], 
             $_POST['statement-content'], 
             new DateTime(), 

@@ -3,6 +3,19 @@
  * -----------------------------------------------------
  */
 
+.main-title {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+}
+
+.thread-name {
+    background: var(--color-light);
+    border-radius: 5px;
+    padding: 0 0.2rem;
+    margin: 0 0.2rem;
+}
+
 /* statement */
 .archived,
 .group-name,
@@ -40,6 +53,11 @@
 
 .record-in-links p:hover {
     color: var(--color-dark);
+}
+
+.small-action-button {
+    float: right;
+    padding-left: 0.5rem;
 }
 
 

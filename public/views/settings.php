@@ -8,11 +8,13 @@
     <link rel="stylesheet" type="text/css" href="/public/css/settings-style.css">
     <script type="text/javascript" src="/public/js/form_validation.js" defer></script>
     <script type="text/javascript" src="/public/js/dialog.js" defer></script>
+    <script type="text/javascript" src="/public/js/message-dialog.js" defer></script>
     <title>Communitly - settings</title>
 </head>
 <body>
     <?php include('header-and-nav.php'); ?>
     <main>
+        <?php include('message-dialog.php'); ?>
         <div class="main-title">
             <h1>Zarządzaj swoim kontem</h1>
         </div>
@@ -38,11 +40,6 @@
                 <div class="dialog js-dialog">
                     <h1>Dołączanie do grupy</h1>
                     <form action="/optInGroup" method="post">
-                        <?php if(isset($messages)): ?>
-                            <?php foreach ($messages as $message): ?>
-                                <span class="error"><?= $message; ?></span>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
                         <input type="text" class='input-with-text' name='accessPassword' placeholder="Kod dołączenia do grupy">
                         <input type="submit" class='button button-in-form' value="Dołącz do grupy">
                     </form>
@@ -92,6 +89,126 @@
             </div>
         </div>
 
+
+
+
+        <div class="settings-for-administrated-groups">
+            <div class="widget-group-header">
+                <h3 class="widget-group">Administrowanie grupami</h3>
+                <a href="#" class="js-dialog-activator">
+                    <i class="fas fa-plus-square fa-hover-hidden"></i>
+                    <i class="far fa-plus-square fa-hover-show"></i>
+                </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                <div class="dialog-background js-dialog-background"></div>
+                <div class="dialog js-dialog">
+                    <h1>Tworzenie nowej grupy</h1>
+                    <form action="/createGroup" method="post"> <!-- TODO: action -->
+                        <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
+                        <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                        <input type="submit" class='button button-in-form' value="Zatwierdź">
+<!--                        TODO: zwracanie access_password -->
+                    </form>
+                </div>
+            </div>
+
+            <div class="settings-widget widget">
+                <ul class="group-list">
+                    <?php foreach ($availableGroups as $group): ?>
+                    <?php if ($userPermissions[$group->getGroupId()] == 1): ?>
+                        <li><?= $group->getFullName(); ?>
+                            <a href="#" class="js-dialog-activator">
+                                <i class="fas fa-minus-square fa-hover-hidden"></i>
+                                <i class="far fa-minus-square fa-hover-show"></i>
+                            </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                            <div class="dialog-background js-dialog-background"></div>
+                            <div class="dialog js-dialog">
+                                <h1>Usuwanie grupy</h1>
+                                <form action="/createGroup" method="post"> <!-- TODO: action -->
+                                    <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
+                                    <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                                    <input type="submit" class='button button-in-form' value="Zatwierdź">
+                                </form>
+                            </div>
+                        </li>
+                        <ul class="group-list">
+                            <?php foreach ($group->getSubgroups() as $subgroup): ?>
+                            <li><?= $subgroup->getFullName(); ?>
+                                <a href="#" class="js-dialog-activator">
+                                    <i class="fas fa-minus-square fa-hover-hidden"></i>
+                                    <i class="far fa-minus-square fa-hover-show"></i>
+                                </a>
+                                <div class="dialog-background js-dialog-background"></div>
+                                <div class="dialog js-dialog">
+                                    <h1>Usuwanie podgrupy</h1>
+                                    <form action="/createGroup" method="post"> <!-- TODO: action -->
+                                        <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
+                                        <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                                        <input type="submit" class='button button-in-form' value="Zatwierdź">
+                                    </form>
+                                </div>
+                            </li>
+                            <ul class="group-list">
+                                <?php foreach ($subgroup->getThreads() as $thread): ?>
+                                <li><?= $thread->getName(); ?>
+                                    <a href="#" class="js-dialog-activator">
+                                        <i class="fas fa-minus-square fa-hover-hidden"></i>
+                                        <i class="far fa-minus-square fa-hover-show"></i>
+                                    </a>
+                                    <div class="dialog-background js-dialog-background"></div>
+                                    <div class="dialog js-dialog">
+                                        <h1>Usuwanie wątku</h1>
+                                        <form action="/createGroup" method="post"> <!-- TODO: action -->
+                                            <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
+                                            <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                                            <input type="submit" class='button button-in-form' value="Zatwierdź">
+                                            <!--                        TODO: zwracanie access_password -->
+                                        </form>
+                                    </div>
+                                </li>
+                                <?php endforeach; ?>
+                                <li>
+                                    <a href="#" class="js-dialog-activator">
+                                        <i class="fas fa-plus-square fa-hover-hidden"></i>
+                                        <i class="far fa-plus-square fa-hover-show"></i>
+                                        Dodaj wątek
+                                    </a>
+                                    <div class="dialog-background js-dialog-background"></div>
+                                    <div class="dialog js-dialog">
+                                        <h1>Dodawanie wątku</h1>
+                                        <form action="/createThread" method="post"> <!-- TODO: action -->
+                                            <input type="hidden" name='subgroupId' value="<?= $subgroup->getSubgroupId() ?>">
+                                            <input type="text" class='input-with-text' name='name' placeholder="Nazwa">
+                                            <input type="submit" class='button button-in-form' value="Zatwierdź">
+                                        </form>
+                                    </div>
+                                </li>
+                            </ul>
+                            <?php endforeach; ?>
+                            <li>
+                                <a href="#" class="js-dialog-activator">
+                                    <i class="fas fa-plus-square fa-hover-hidden"></i>
+                                    <i class="far fa-plus-square fa-hover-show"></i>
+                                    Dodaj podgrupę
+                                </a>
+                                <div class="dialog-background js-dialog-background"></div>
+                                <div class="dialog js-dialog">
+                                    <h1>Dodawanie podgrupy</h1>
+                                    <form action="/createSubgroup" method="post"> <!-- TODO: action -->
+                                        <input type="hidden" name='groupId' value="<?= $group->getGroupId() ?>">
+                                        <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
+                                        <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                                        <input type="submit" class='button button-in-form' value="Zatwierdź">
+                                    </form>
+                                </div>
+                            </li>
+                        </ul>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>
+
+
         <div class="settings-for-user-identities">
             <div class="widget-group-header">
                 <h3 class="widget-group">Twoje dane osobowe</h3>
@@ -102,11 +219,6 @@
                 <div class="dialog js-dialog">
                     <h1>Zmiana danych osobowych</h1>
                         <form action="/changeUserData" method="post">
-                            <?php if(isset($messages)): ?>
-                                <?php foreach ($messages as $message): ?>
-                                    <span class="error"><?= $message; ?></span>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
                             <input type="text" class='input-with-text' name='email' placeholder="Login" autofocus>
                             <input type="password" class='input-with-text' name="oldPassword" placeholder="Old Password">
                             <input type="password" class='input-with-text' name="newPassword" placeholder="New Password">

@@ -8,6 +8,10 @@ Routing::get('', 'DefaultController');
 Routing::get('index', 'DefaultController');
 Routing::get('register', 'DefaultController');
 
+Routing::get('createGroup', 'GroupController');
+Routing::get('createSubgroup', 'GroupController');
+Routing::get('createThread', 'GroupController');
+
 Routing::get('dashboard', 'SubgroupController');
 Routing::get('subgroup', 'SubgroupController');
 
@@ -25,6 +29,7 @@ Routing::post('signIn', 'SecurityController');
 Routing::post('signUp', 'SecurityController');
 
 Routing::post('addStatement', 'StatementController');
+Routing::post('editStatement', 'StatementController');
 
 Routing::post('changeUserData', 'SettingsModificationController');
 

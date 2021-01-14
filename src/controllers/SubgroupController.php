@@ -19,13 +19,18 @@ class SubgroupController extends AppController {
         $displayedSubgroup = $this->groupRepository->getSubgroup($_SESSION['userId'], $subgroupId);
         $statements = $this->statementRepository->getStatements($_SESSION['userId'], $subgroupId);
         $allThreadsInSubgroup = $this->groupRepository->getThreads($subgroupId);
+        $groupId = $this->getGroupId($groupsInMenu, $subgroupId);
+        $permission = $_SESSION['permissions'][$groupId];
+        $activeThreads = $this->groupRepository->getThreads($subgroupId, $_SESSION['userId']);
 
         $this->render('subgroup', [
             'groups' => $groupsInMenu, 
             'statements' => $statements, 
             'subgroup' => $displayedSubgroup,
             'id' => $subgroupId,
-            'allThreadsInSubgroup' => $allThreadsInSubgroup
+            'allThreadsInSubgroup' => $allThreadsInSubgroup,
+            'permission' => $permission,
+            'activeThreads' => $activeThreads
         ]);
     }
 
@@ -37,6 +42,16 @@ class SubgroupController extends AppController {
             'userFirstname' => $userFirstname,
             'groups' => $groupsInMenu
         ]);
+    }
+
+    private function getGroupId($groups, $subgroupId) {
+        foreach ($groups as $group) {
+            foreach ($group->getSubgroups() as $subgroup) {
+                if ($subgroup->getSubgroupId() == $subgroupId) {
+                    return $group->getGroupId();
+                }
+            }
+        }
     }
 }
 ?>

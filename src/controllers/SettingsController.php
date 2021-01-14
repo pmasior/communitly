@@ -15,6 +15,7 @@ class SettingsController extends AppController {
         $userFirstname = $_SESSION['userFirstName'];
         $userLastName = $_SESSION['userLastName'];
         $userEmail = $_SESSION['email'];
+        $userPermissions = $_SESSION['permissions'];
         $groupsInMenu = $this->groupRepository->getGroups($_SESSION['userId'], true, true, false);
         $availableGroups = $this->groupRepository->getGroups($_SESSION['userId'], true, true, true);
         $groupsIdForUser = $this->getGroupsIdForUser($groupsInMenu);
@@ -25,6 +26,7 @@ class SettingsController extends AppController {
             'userFirstname' => $userFirstname,
             'userLastName' => $userLastName,
             'userEmail' => $userEmail,
+            'userPermissions' => $userPermissions,
             'groups' => $groupsInMenu,
             'availableGroups' => $availableGroups,
             'groupsIdForUser' => $groupsIdForUser,

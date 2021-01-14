@@ -18,6 +18,9 @@ class GroupRepository extends Repository {
     const OPT_OUT_USER_FROM_SUBGROUP = 'SELECT * FROM opt_out_user_from_subgroup(?, ?);';
     const OPT_IN_USER_TO_THREAD = 'SELECT * FROM opt_in_user_to_thread(?, ?);';
     const OPT_OUT_USER_FROM_THREAD = 'SELECT * FROM opt_out_user_from_thread(?, ?);';
+    const INSERT_GROUP = 'SELECT insert_group(?, ?, ?);';
+    const INSERT_SUBGROUP = 'SELECT insert_subgroup(?, ?, ?);';
+    const INSERT_THREAD = 'SELECT insert_thread(?, ?);';
 
     public function getGroups($userId, bool $includeSubgroups, bool $includeThreads, bool $showAvailableToJoin): array {
         $groups = $this->getGroupsForUser($userId);
@@ -49,6 +52,41 @@ class GroupRepository extends Repository {
             );
         }
         return $this->convertDatabaseResultToObjects($queryResult, 'Thread');
+    }
+
+    public function createGroup(Group $group) {
+        $queryResult = $this->insert(
+            self::INSERT_GROUP,
+            [
+                $group->getFullName(),
+                $group->getShortName(),
+                $group->getAccessPassword()
+            ]
+        );
+        return $queryResult['insert_group'];
+    }
+
+    public function createSubgroup(Subgroup $subgroup, $groupId) {
+        $queryResult = $this->insert(
+            self::INSERT_SUBGROUP,
+            [
+                $groupId,
+                $subgroup->getFullName(),
+                $subgroup->getShortName()
+            ]
+        );
+        return $queryResult['insert_subgroup'];
+    }
+
+    public function createThread(Thread $thread) {
+        $queryResult = $this->insert(
+            self::INSERT_THREAD,
+            [
+                $thread->getSubgroupId(),
+                $thread->getName()
+            ]
+        );
+        return $queryResult['insert_subgroup'];
     }
 
     public function optInUserToGroup($userId, $groupAccessPassword) {
@@ -142,7 +180,7 @@ class GroupRepository extends Repository {
             if ($showAvailableToJoin) {
                 $threads = $this->getThreads($subgroup->getSubgroupId());
             } else {
-                $threads = $this->getThreads($userId, $subgroup->getSubgroupId());
+                $threads = $this->getThreads($subgroup->getSubgroupId(), $userId);
             }
             $subgroup->setThreads($threads);
         }

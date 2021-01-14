@@ -5,11 +5,10 @@ class Group {
     private $fullName;
     private $shortName;
     private $accessPassword;
-    // private $salt;
     private $subgroups = [];
 
     public function __construct(
-        string $groupId,
+        ?string $groupId,
         string $fullName, 
         string $shortName, 
         string $accessPassword

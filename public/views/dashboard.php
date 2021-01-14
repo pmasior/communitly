@@ -6,11 +6,13 @@
     <link rel="stylesheet" type="text/css" href="/public/css/all.css">
     <link rel="stylesheet" type="text/css" href="/public/css/app-style.css">
     <link rel="stylesheet" type="text/css" href="/public/css/dashboard-style.css">
+    <script type="text/javascript" src="/public/js/message-dialog.js" defer></script>
     <title>Communitly - dashboard</title>
 </head>
 <body>
     <?php include('header-and-nav.php'); ?>
     <main>
+        <?php include('message-dialog.php'); ?>
         <div class="main-title">
             <h1>Witaj <?= $userFirstname;?>!</h1>
         </div>

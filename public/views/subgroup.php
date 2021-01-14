@@ -8,13 +8,18 @@
     <link rel="stylesheet" type="text/css" href="/public/css/dashboard-style.css">
     <script type="text/javascript" src="/public/js/form_validation.js" defer></script>
     <script type="text/javascript" src="/public/js/dialog.js" defer></script>
-    <title>Communitly - subgroup</title>
+    <script type="text/javascript" src="/public/js/message-dialog.js" defer></script>
+    <title><?= $subgroup->getFullName(); ?> - Communitly</title>
 </head>
 <body>
     <?php include('header-and-nav.php'); ?>
     <main>
+        <?php include('message-dialog.php'); ?>
         <div class="main-title">
             <h1><?= $subgroup->getFullName(); ?></h1>
+            <?php foreach ($activeThreads as $thread): ?>
+                <p class="thread-name"><?= $thread->getName(); ?></p>
+            <?php endforeach; ?>
         </div>
         <div class="statements">
             <div class="widget-group-header">
@@ -30,19 +35,12 @@
                 <h1>Dodawanie komunikatu</h1>
                 <h4>
                     <span class="group-name"><?= $group->getFullName(); ?></span>
-                    <span class="subgroup"><a href="wdpai"><?= $subgroup->getFullName(); ?></a></span>
+                    <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
                 </h4>
                 <form action="/addStatement" method="post" enctype="multipart/form-data">
-                    <?php
-                        if(isset($messages)) {
-                            foreach ($messages as $message) {
-                                echo $message;
-                            }
-                        }
-                    ?><!-- TODO: change ↑ (wyświetlanie błędu) ↓ (usunięcie value) -->
                     <input type="text" class='input-with-text' name='statement-header' placeholder="Nagłówek">
                     <input type="text" class='input-with-text' name='statement-url' placeholder="Link do źródła">
-                    <textarea name="statement-content" class='input-with-text' placeholder="Treść nowego komunikatu" autofocus></textarea>
+                    <textarea name="statement-content" class='input-with-text' placeholder="Treść nowego komunikatu"></textarea>
                     <?php foreach ($allThreadsInSubgroup as $thread): ?>
                         <span>
                             <label>
@@ -59,38 +57,63 @@
             <?php foreach ($statements as $statement): ?>
                 <div class="widget">
                     <h2><?= $statement->getHeader(); ?></h2>
+                    <?php if ($permission == 1): ?>
+                    <a href="#" class="small-action-button">
+                        <i class="fas fa-minus-square fa-hover-hidden"></i>
+                        <i class="far fa-minus-square fa-hover-show"></i>
+                    </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                    <a href="#" class="small-action-button js-dialog-activator">
+                        <i class="fas fa-pen-square fa-hover-hidden"></i>
+                        <i class="fas fa-pen-square fa-hover-show"></i>
+                    </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                    <div class="dialog-background js-dialog-background"></div>
+                    <div class="dialog js-dialog">
+                        <h1>Edycja komunikatu</h1>
+                        <form action="/editStatement" method="post">
+                            <h4><?= $statement->getHeader(); ?></h4>
+                            <input type="hidden" name='statementId' value="<?= $statement->getStatementId() ?>">
+                            <input type="text" class='input-with-text' name='statement-header' placeholder="Nagłówek" value="<?= $statement->getHeader(); ?>">
+                            <input type="text" class='input-with-text' name='statement-url' placeholder="Link do źródła" value="<?= $statement->getSourceURL(); ?>">
+                            <textarea name="statement-content" class='input-with-text' placeholder="Treść nowego komunikatu"><?= $statement->getContent(); ?></textarea>
+                            <?php foreach ($allThreadsInSubgroup as $thread): ?>
+                            <span>
+                                <label>
+                                    <input type="checkbox" class='checkbox-in-form' name="thread[]" placeholder="Wątki" value='<?= $thread->getThreadId(); ?>'>
+                                    <?= $thread->getName(); ?>
+                                </label>
+                            </span>
+                            <?php endforeach; ?>
+                            <input type="submit" class='button button-in-form' value="Potwierdź">
+                        </form>
+                    </div>
+                    <? endif; ?>
+
                     <p class="date-and-source">
-                        <?php
-                        $approveDate = $statement->getApproveDate();
-                        if ($approveDate) {
-                            echo "<span title='Dodane " . $statement->getCreationDate()->format('d.m.Y H:i:s') . " przez ?\nZweryfikowane " . $approveDate->format('d.m.Y H:i:s') . " przez ?'>
-                                    <i class='fas fa-check-circle verified-statement'></i>
-                                    </span>";
-                        } else {
-                            echo "<span title='Dodane " . $statement->getCreationDate()->format('d.m.Y H:i:s') . " przez ?\n'></span>
-                                    <i class='fas fa-exclamation-circle unverified-statement'></i>
-                                    </span>";
-                        }
-                        ?>
-
+                        <?php if ($statement->getApproveDate()): ?>
+                        <span title='Dodane <?= $statement->getCreationDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?> \nZweryfikowane <?= $approveDate->format('d.m.Y H:i:s') ?> przez <?= 1234; ?>'>
+                            <i class='fas fa-check-circle verified-statement'></i>
+                        </span>
+                        <?php else: ?>
+                        <span title='Dodane <?= $statement->getCreationDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?>'>
+                            <i class='fas fa-exclamation-circle unverified-statement'></i>
+                        </span>
+                        <?php endif; ?>
                         <?= $statement->getCreationDate()->format('d.m.Y H:i:s'); ?>
-
-                        <?php if ($statement->getSourceURL()) {echo " z ";} ?>
-                        <a href="<?= $statement->getSourceURL(); ?>">
-                            <?php 
-                                preg_match("/:\/\/(\S+\.\w+)/", $statement->getSourceURL(), $url);
-                                echo $url[1];
-                            ?>
+                        <?php if ($statement->getSourceURL()): ?>
+                        z <a href="<?= $statement->getSourceURL(); ?>">
+                            <?php preg_match("/:\/\/(\S+\.\w+)/", $statement->getSourceURL(), $url); ?>
+                            <?= $url[1]; ?>
                         </a>
-
+                        <?php endif; ?>
                     </p>
+
                     <p><?= $statement->getContent(); ?></p>
                     <?php foreach ($statement->getAttachments() as $attachment): ?>
                         <a href="<?= '/public/uploads/' . $attachment->getFilename(); ?>" class="attachment">
                             <i class="fas fa-paperclip"></i>
                             <?= $attachment->getFilename(); ?>
                         </a>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
                 </div>
             <?php endforeach; ?>
 
@@ -127,13 +150,6 @@
                     <li class="record-in-links">
                         <!-- TODO: zmienić styl, zmienić action="" -->
                         <form action="login" method="post" enctype="multipart/form-data">
-                            <?php 
-                                if(isset($messages)) {
-                                    foreach ($messages as $message) {
-                                        echo $message;
-                                    }
-                                }
-                            ?><!-- TODO: change ↑ (wyświetlanie błędu) ↓ (usunięcie value) -->
                             <input type="url" name='link-url' placeholder="Link">
                             <input type="text" name='link-header' placeholder="Nazwa">
                             <textarea name="link-note" placeholder="Notatka"></textarea>

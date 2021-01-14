@@ -28,10 +28,13 @@ class SecurityController extends AppController {
             return $this->render('login', ['messages' => ['Wrong password']]);
         }
 
+        $permissions = $this->userRepository->getPermissions($user->getUserId());
+
         $_SESSION['email'] = $user->getEmail();
         $_SESSION['userId'] = $user->getUserId();
         $_SESSION['userFirstName'] = $user->getFirstname();
         $_SESSION['userLastName'] = $user->getLastname();
+        $_SESSION['permissions'] = $permissions;
         header('Location: /dashboard');
     }
 
