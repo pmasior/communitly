@@ -276,6 +276,7 @@ form {
     color: var(--color-blue);
     cursor: pointer;
     font-weight: 500;
+    margin: 0;
     padding: 0.75em 3.5em;
     transition: background var(--transition-delay),
                 color var(--transition-delay);

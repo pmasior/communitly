@@ -6,7 +6,7 @@
 .main-title {
     display: flex;
     flex-direction: row;
-    align-items: baseline;
+    align-items: last baseline;
 }
 
 .thread-name {
