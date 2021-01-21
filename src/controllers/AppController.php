@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/../session/Session.php';
+
 class AppController {
     private $request;
 
