@@ -1,5 +1,5 @@
 <?php
-
+require_once 'Repository.php';
 
 class SessionRepository extends Repository {
     const INSERT_AUTO_LOGIN = 'SELECT insert_auto_login(?, ?, ?);';

@@ -1,6 +1,6 @@
 <?php
+require_once __DIR__ . '/../repository/SessionRepository.php';
 require_once __DIR__ . '/../session/Session.php';
-
 
 class AutoLogin
 {
