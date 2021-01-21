@@ -86,11 +86,38 @@
                             <input type="submit" class='button button-in-form' value="Potwierdź">
                         </form>
                     </div>
+                    <a href="#" class="small-action-button js-dialog-activator">
+                        <i class="fas fa-check-square fa-hover-hidden"></i>
+                        <i class="far fa-check-square fa-hover-show"></i>
+<!--                        --><?//= $statement->getApproveDate() . 'n'?>
+                    </a>
+                    <div class="dialog-background js-dialog-background"></div>
+                    <div class="dialog js-dialog">
+                        <?php if ($statement->getApproveDate()): ?>
+                            <h1>Cofanie potwierdzenia komunikatu</h1>
+                            Czy chcesz cofnąć potwierdzenie komunikatu?
+                            <form action="/undoConfirmStatement" method="post">
+                                <h4><?= $statement->getHeader(); ?></h4>
+                                <input type="hidden" name='statementId' value="<?= $statement->getStatementId() ?>">
+                                <input type="submit" class='button button-in-form' value="Potwierdź">
+                            </form>
+                        <?php else: ?>
+                            <h1>Potwierdzanie komunikatu</h1>
+                            Czy chcesz potwierdzić komunikat?
+                            <form action="/confirmStatement" method="post">
+                                <h4><?= $statement->getHeader(); ?></h4>
+                                <input type="hidden" name='userId' value="<?= $_SESSION['userId'] ?>">
+                                <input type="hidden" name='statementId' value="<?= $statement->getStatementId() ?>">
+                                <input type="submit" class='button button-in-form' value="Potwierdź">
+                            </form>
+                        <?php endif; ?>
+                    </div>
+
                     <? endif; ?>
 
                     <p class="date-and-source">
                         <?php if ($statement->getApproveDate()): ?>
-                        <span title='Dodane <?= $statement->getCreationDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?> \nZweryfikowane <?= $approveDate->format('d.m.Y H:i:s') ?> przez <?= 1234; ?>'>
+                        <span title='Dodane <?= $statement->getCreationDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?> \nZweryfikowane <?= $statement->getApproveDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?>'>
                             <i class='fas fa-check-circle verified-statement'></i>
                         </span>
                         <?php else: ?>

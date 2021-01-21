@@ -1,5 +1,6 @@
 <?php
-
+require_once 'AppController.php';
+require_once __DIR__ . '/../repository/GroupRepository.php';
 
 class GroupController extends AppController {
     private $groupRepository;
@@ -10,6 +11,7 @@ class GroupController extends AppController {
     }
 
     public function createGroup() {
+        (new Session())->handleSession(true);
         $fullName = $_POST['fullName'];
         $shortName = $_POST['shortName'];
         $accessPassword = $this->generateRandomAccessPassword();
@@ -32,6 +34,7 @@ class GroupController extends AppController {
     }
 
     public function createSubgroup() {
+        (new Session())->handleSession(true);
         $groupId = $_POST['groupId'];
         $fullName = $_POST['fullName'];
         $shortName = $_POST['shortName'];
@@ -47,6 +50,7 @@ class GroupController extends AppController {
     }
 
     public function createThread() {
+        (new Session())->handleSession(true);
         $subgroupId = $_POST['subgroupId'];
         $name = $_POST['name'];
 

@@ -4,7 +4,6 @@ class AppController {
 
     public function __construct() {
         $this->request = $_SERVER['REQUEST_METHOD'];
-        session_start();
     }
 
     protected function render(string $template = null, array $variables = []) {
@@ -21,11 +20,11 @@ class AppController {
         print $output;
     }
 
-    protected function isPost() {
+    protected function isPost(): bool {
         return $this->request == 'POST';
     }
 
-    protected function isGet() {
+    protected function isGet(): bool {
         return $this->request == 'GET';
     }
 }

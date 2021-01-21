@@ -15,6 +15,8 @@ class SubgroupController extends AppController {
     }
 
     public function subgroup($subgroupId) {
+        (new Session())->handleSession(true);
+//        TODO: check if user type address in address bar
         $groupsInMenu = $this->groupRepository->getGroups($_SESSION['userId'], true, false, false);
         $displayedSubgroup = $this->groupRepository->getSubgroup($_SESSION['userId'], $subgroupId);
         $statements = $this->statementRepository->getStatements($_SESSION['userId'], $subgroupId);
@@ -35,6 +37,7 @@ class SubgroupController extends AppController {
     }
 
     public function dashboard() {
+        (new Session())->handleSession(true);
         $userFirstname = $_SESSION['userFirstName'];
         $groupsInMenu = $this->groupRepository->getGroups($_SESSION['userId'], true, false, false);
         

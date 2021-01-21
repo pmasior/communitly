@@ -43,6 +43,23 @@ class StatementRepository extends Repository {
         return $queryResult['change_statement'];
     }
 
+//    public function confirmStatement(Statement $statement) {
+    public function confirmStatement($userId, $statementId, $approveDate) {
+        $queryResult = $this->update(
+            'SELECT * FROM confirm_statement(:userId, :statementId, :approveDate);',
+            [$userId, $statementId, $approveDate]
+        );
+        return $queryResult['change_statement'];  // TODO: __
+    }
+
+    public function undoConfirmStatement($userId, $statementId) {
+        $queryResult = $this->update(
+            'SELECT * FROM undo_confirm_statement(?, ?);',
+            [$userId, $statementId]
+        );
+        return $queryResult['change_statement'];  // TODO: __
+    }
+
     public function addAttachment($file, $statementId) {
         $queryResult = $this->insert(
             self::INSERT_ATTACHMENT,
@@ -119,8 +136,8 @@ class StatementRepository extends Repository {
             $statement['content'], 
             new DateTime($statement['creation_date']),  // TODO: zmienić
             $statement['id_creation_user'],
-            // $statement['approve_date'] ? new DateTime($statement['approve_date']) : null,
-            // $statement['id_approve_user'],
+             $statement['approve_date'] ? new DateTime($statement['approve_date']) : null,
+             $statement['id_approve_user'],
             // ' ',  // TODO: attachments
             $statement['source_url'] ?: null,
         );

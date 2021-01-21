@@ -30,6 +30,8 @@ Routing::post('signUp', 'SecurityController');
 
 Routing::post('addStatement', 'StatementController');
 Routing::post('editStatement', 'StatementController');
+Routing::post('confirmStatement', 'StatementController');
+Routing::post('undoConfirmStatement', 'StatementController');
 
 Routing::post('changeUserData', 'SettingsModificationController');
 

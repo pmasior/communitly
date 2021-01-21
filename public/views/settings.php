@@ -139,6 +139,7 @@
                                 </a>
                                 <div class="dialog-background js-dialog-background"></div>
                                 <div class="dialog js-dialog">
+<!--                                    TODO: Usuwanie grupy, podgrupy, wątku-->
                                     <h1>Usuwanie podgrupy</h1>
                                     <form action="/createGroup" method="post"> <!-- TODO: action -->
                                         <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">

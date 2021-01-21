@@ -17,8 +17,8 @@ class Statement {
         string $content, 
         ?DateTime $creationDate, 
         string $creationUser,
-        // ?DateTime $approveDate, 
-        // ?string $approveUser,
+        ?DateTime $approveDate,
+        ?string $approveUser,
         // $attachments, 
         ?string $sourceURL
     ) {
@@ -27,8 +27,8 @@ class Statement {
         $this->content = $content;
         $this->creationDate = $creationDate;
         $this->creationUser = $creationUser;
-        // $this->approveDate = $approveDate;
-        // $this->approveUser = $approveUser;
+        $this->approveDate = $approveDate;
+        $this->approveUser = $approveUser;
         // $this->attachments = $attachments;
         $this->sourceURL = $sourceURL;
     }

@@ -14,12 +14,14 @@ class SettingsModificationController extends AppController {
     }
 
     public function optOutThread($threadId) {
+        (new Session())->handleSession(true);
         $userId = $_SESSION['userId'];  // TODO: safe_input
         $this->groupRepository->optOutUserFromThread($userId, $threadId);
         header('Location: /settings');
     }
 
     public function optInThread($threadId) {
+        (new Session())->handleSession(true);
         $userId = $_SESSION['userId'];
         $this->groupRepository->optInUserToThread($userId, $threadId);
         header('Location: /settings');
@@ -27,6 +29,7 @@ class SettingsModificationController extends AppController {
 
 //    TODO: join, quit
     public function optInGroup() {
+        (new Session())->handleSession(true);
         $userId = $_SESSION['userId'];
         $accessPassword = $_POST['accessPassword'];
         $this->groupRepository->optInUserToGroup($userId, $accessPassword);
@@ -34,24 +37,28 @@ class SettingsModificationController extends AppController {
     }
 
     public function optOutGroup($groupId) {
+        (new Session())->handleSession(true);
         $userId = $_SESSION['userId'];
         $this->groupRepository->optOutUserFromGroup($userId, $groupId);
         header('Location: /settings');
     }
 
     public function optInSubgroup($subgroupId) {
+        (new Session())->handleSession(true);
         $userId = $_SESSION['userId'];
         $this->groupRepository->optInUserToSubgroup($userId, $subgroupId);
         header('Location: /settings');
     }
 
     public function optOutSubgroup($subgroupId) {
+        (new Session())->handleSession(true);
         $userId = $_SESSION['userId'];
         $this->groupRepository->optOutUserFromSubgroup($userId, $subgroupId);
         header('Location: /settings');
     }
 
     public function changeUserData() {
+        (new Session())->handleSession(true);
         if (!$this->isPost()) {
             header('Location: /');
         }

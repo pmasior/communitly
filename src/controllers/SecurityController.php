@@ -11,6 +11,7 @@ class SecurityController extends AppController {
     }
 
     public function signIn() {
+        (new Session())->handleSession(false);
         if (!$this->isPost()) {
             header('Location: /');
         }
@@ -35,10 +36,14 @@ class SecurityController extends AppController {
         $_SESSION['userFirstName'] = $user->getFirstname();
         $_SESSION['userLastName'] = $user->getLastname();
         $_SESSION['permissions'] = $permissions;
+
+        (new AutoLogin())->setAutoLogin($_SESSION['userId']);
+
         header('Location: /dashboard');
     }
 
     public function signUp() {
+        (new Session())->handleSession(false);
         if (!$this->isPost()) {
             header('Location: /');
         }
@@ -67,6 +72,7 @@ class SecurityController extends AppController {
     }
 
     public function logout() {
+        (new Session())->handleSession(false);
         session_unset();
         session_destroy();
         return $this->render('login', ['messages' => ['You have been successfully logged out']]);

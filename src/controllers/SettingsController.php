@@ -12,6 +12,7 @@ class SettingsController extends AppController {
     }
 
     public function settings() {
+        (new Session())->handleSession(true);
         $userFirstname = $_SESSION['userFirstName'];
         $userLastName = $_SESSION['userLastName'];
         $userEmail = $_SESSION['email'];

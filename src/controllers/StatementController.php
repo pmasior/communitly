@@ -48,6 +48,7 @@ class StatementController extends AppController {
     }
 
     public function addStatement() {
+        (new Session())->handleSession(true);
         if (!$this->isPost() || !$this->isValidateStatement()) {
             header('Location: /dashboard');
         }
@@ -73,7 +74,37 @@ class StatementController extends AppController {
         header('Location: /dashboard');
     }
 
+    public function confirmStatement() {
+        (new Session())->handleSession(true);
+        if (!$this->isPost()) {
+            header('Location: /dashboard');
+        }
+
+        $statementId = $_POST['statementId'];
+        $userId = $_POST['userId'];
+        $approveDate = (new DateTime())->format('c');
+
+        $this->statementRepository->confirmStatement($userId, $statementId, $approveDate);
+
+        header('Location: /dashboard');
+    }
+
+    public function undoConfirmStatement() {
+        (new Session())->handleSession(true);
+        if (!$this->isPost()) {
+            header('Location: /dashboard');
+        }
+
+        $statementId = $_POST['statementId'];
+        $userId = $_POST['userId'];
+
+        $this->statementRepository->undoConfirmStatement($userId, $statementId);
+
+        header('Location: /dashboard');
+    }
+
     public function editStatement() {
+        (new Session())->handleSession(true);
         if (!$this->isPost() || !$this->isValidateStatement()) {
             header('Location: /dashboard');
         }
