@@ -20,6 +20,7 @@ class SecurityController extends AppController {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
+        $this->userRepository->beginTransaction();
         try {
             $user = $this->userRepository->getUserForEmail($email);
         } catch (NotFoundUserException $e) {
@@ -33,6 +34,7 @@ class SecurityController extends AppController {
         }
 
         $permissions = $this->userRepository->getPermissions($user->getUserId());
+        $this->userRepository->commit();
 
         $_SESSION['email'] = $user->getEmail();
         $_SESSION['userId'] = $user->getUserId();

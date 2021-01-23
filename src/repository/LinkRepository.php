@@ -45,6 +45,14 @@ class LinkRepository extends Repository {
         );
     }
 
+    public function beginTransaction() {
+        self::$uniqueInstance->beginTransaction();
+    }
+
+    public function commit() {
+        self::$uniqueInstance->commit();
+    }
+
     private function convertDatabaseResultToObjects(array $records, string $convertTo): array {
         $convert = 'convertTo' . $convertTo;
         $result = [];

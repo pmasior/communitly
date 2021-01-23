@@ -124,6 +124,14 @@ class StatementRepository extends Repository {
         );
     }
 
+    public function beginTransaction() {
+        self::$uniqueInstance->beginTransaction();
+    }
+
+    public function commit() {
+        self::$uniqueInstance->commit();
+    }
+
     private function getAttachmentsForStatements(array $statements) {
         foreach ($statements as $statement) {
             $queryResult = self::$uniqueInstance->executeAndFetchAll(

@@ -53,10 +53,12 @@ class StatementController extends AppController {
         }
 
         $statement = $this->createStatementInstance();
+        $this->statementRepository->beginTransaction();
         $statementId = $this->statementRepository->addStatement($statement);
 
         $this->associateStatementWithThread($statementId);
         $this->addAttachments($statementId);
+        $this->statementRepository->commit();
 
         header('Location: /dashboard');
     }
@@ -97,10 +99,12 @@ class StatementController extends AppController {
         }
 
         $statement = $this->createStatementInstance();
+        $this->statementRepository->beginTransaction();
         $statementId = $this->statementRepository->editStatement($statement);
 
         $this->associateStatementWithThread($statementId);
         $this->addAttachments($statementId);
+        $this->statementRepository->commit();
         header('Location: /dashboard');
     }
 
@@ -110,14 +114,16 @@ class StatementController extends AppController {
             header('Location: /dashboard');
         }
         $statementId = $_POST['statementId'];
+        $this->statementRepository->beginTransaction();
         $statement = $this->statementRepository->getStatement($statementId);
         foreach ($statement->getAttachments() as $attachment) {
-            $location = $this->relativeUploadDirectory . $attachment->getServerFilename();
+            $location = $this->relativeUploadDirectory . $attachment->getFilename();
             if (file_exists($location)) {
                 unlink($location);
             }
         }
         $this->statementRepository->removeStatement($statementId);
+        $this->statementRepository->commit();
         header('Location: /dashboard');
     }
 

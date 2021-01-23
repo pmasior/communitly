@@ -22,8 +22,10 @@ class GroupController extends AppController {
             $shortName,
             $accessPassword
         );
+        $this->groupRepository->beginTransaction();
         $groupId = $this->groupRepository->createGroup($group);
         $this->groupRepository->setAdminForGroup($groupId, $_SESSION['userId']);
+        $this->groupRepository->commit();
 
         (new SettingsController())->settings(['Utworzyłeś grupę ' . $group->getFullName() . '. Hasło zapisu do grupy to: ' . $accessPassword]);
     }

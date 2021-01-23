@@ -19,6 +19,8 @@ class LinkController extends AppController {
         }
 
         $link = $this->createLinkInstance();
+
+        $this->linkRepository->beginTransaction();
         $linkId = $this->linkRepository->addLink($link);
 
         if ($_POST['thread']) {
@@ -26,6 +28,7 @@ class LinkController extends AppController {
                 $this->linkRepository->associateLinkWithThread($linkId, $thread);
             }
         }
+        $this->linkRepository->commit();
 
         header('Location: /dashboard');
     }

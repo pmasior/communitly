@@ -86,6 +86,14 @@ class UserRepository extends Repository {
         return $this->convertToPermissionArray($queryResult);
     }
 
+    public function beginTransaction() {
+        self::$uniqueInstance->beginTransaction();
+    }
+
+    public function commit() {
+        self::$uniqueInstance->commit();
+    }
+
     private function convertDatabaseResultToObjects(array $records, string $convertTo): array {
         $convert = 'convertTo' . $convertTo;
         $result = [];

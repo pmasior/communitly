@@ -156,6 +156,14 @@ class GroupRepository extends Repository {
         return $queryResult['opt_out_user_from_thread'];
     }
 
+    public function beginTransaction() {
+        self::$uniqueInstance->beginTransaction();
+    }
+
+    public function commit() {
+        self::$uniqueInstance->commit();
+    }
+
     private function getGroupsForUser($userId): array {
         $queryResult = self::$uniqueInstance->executeAndFetchAll(
             'SELECT * FROM select_groups_for_user(?);',

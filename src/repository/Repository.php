@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../Database.php';
 class Repository {
     protected static ?Repository $uniqueInstance = null;
     protected Database $database;
-    protected $database_connection;
+    protected $databaseConnection;
 
     private function __construct() {
         $this->database = new Database();
@@ -28,11 +28,29 @@ class Repository {
     }
 
     private function execute($query, ?array $arguments = NULL) {
-        if (!$this->database_connection) {
-            $this->database_connection = $this->database->connect();
+        if (!$this->databaseConnection) {
+            $this->databaseConnection = $this->database->connect();
         }
-        $stmt = $this->database_connection->prepare($query);
-        $stmt->execute($arguments);
+        $stmt = $this->databaseConnection->prepare($query);
+        try {
+            $stmt->execute($arguments);
+        } catch (PDOException $e) {
+            throw new ErrorException('Database execute() error');
+        }
         return $stmt;
+    }
+
+    public function beginTransaction() {
+        if (!$this->databaseConnection) {
+            $this->databaseConnection = $this->database->connect();
+        }
+        $this->databaseConnection->beginTransaction();
+    }
+
+    public function commit() {
+        if (!$this->databaseConnection) {
+            $this->databaseConnection = $this->database->connect();
+        }
+        $this->databaseConnection->commit();
     }
 }
