@@ -6,21 +6,11 @@ require_once __DIR__ . '/../models/Subgroup.php';
 require_once __DIR__ . '/../models/Thread.php';
 
 class GroupRepository extends Repository {
-    const SELECT_GROUPS_FOR_USER = 'SELECT * FROM select_groups_for_user(?);';
-    const SELECT_SUBGROUPS_FOR_GROUP = 'SELECT * FROM select_subgroups_for_group(?);';
-    const SELECT_SUBGROUPS_FOR_USER_AND_GROUP = 'SELECT * FROM select_subgroups_for_user_and_group(?, ?);';
-    const SELECT_SUBGROUP_FOR_USER_AND_SUBGROUP_ID = 'SELECT * FROM select_subgroup_for_user_and_subgroup_id(?, ?);';
-    const SELECT_THREADS_FOR_SUBGROUP = 'SELECT * FROM select_threads_for_subgroup(?);';
-    const SELECT_THREADS_FOR_USER_AND_SUBGROUP = 'SELECT * FROM select_threads_for_user_and_subgroup(?, ?);';
-    const OPT_IN_USER_TO_GROUP = 'SELECT * FROM opt_in_user_to_group(?, ?);';
-    const OPT_OUT_USER_FROM_GROUP = 'SELECT * FROM opt_out_user_from_group(?, ?);';
-    const OPT_IN_USER_TO_SUBGROUP = 'SELECT * FROM opt_in_user_to_subgroup(?, ?);';
-    const OPT_OUT_USER_FROM_SUBGROUP = 'SELECT * FROM opt_out_user_from_subgroup(?, ?);';
-    const OPT_IN_USER_TO_THREAD = 'SELECT * FROM opt_in_user_to_thread(?, ?);';
-    const OPT_OUT_USER_FROM_THREAD = 'SELECT * FROM opt_out_user_from_thread(?, ?);';
-    const INSERT_GROUP = 'SELECT insert_group(?, ?, ?);';
-    const INSERT_SUBGROUP = 'SELECT insert_subgroup(?, ?, ?);';
-    const INSERT_THREAD = 'SELECT insert_thread(?, ?);';
+    protected static ?Repository $uniqueInstance;
+
+    public function __construct() {
+        self::$uniqueInstance = Repository::getInstance();
+    }
 
     public function getGroups($userId, bool $includeSubgroups, bool $includeThreads, bool $showAvailableToJoin): array {
         $groups = $this->getGroupsForUser($userId);
@@ -31,8 +21,8 @@ class GroupRepository extends Repository {
     }
 
     public function getSubgroup($userId, $subgroupId) {
-        $subgroupQueryResult = $this->select(
-            self::SELECT_SUBGROUP_FOR_USER_AND_SUBGROUP_ID,
+        $subgroupQueryResult = self::$uniqueInstance->executeAndFetchAll(
+            'SELECT * FROM select_subgroup_for_user_and_subgroup_id(?, ?);',
             [$userId, $subgroupId]
         );
         $subgroupsArray = $this->convertDatabaseResultToObjects($subgroupQueryResult, 'Subgroup');
@@ -41,13 +31,13 @@ class GroupRepository extends Repository {
 
     public function getThreads($subgroupId, $userId = NULL): array {
         if ($userId) {
-            $queryResult = $this->select(
-                self::SELECT_THREADS_FOR_USER_AND_SUBGROUP,
+            $queryResult = self::$uniqueInstance->executeAndFetchAll(
+                'SELECT * FROM select_threads_for_user_and_subgroup(?, ?);',
                 [$userId, $subgroupId]
             );
         } else {
-            $queryResult = $this->select(
-                self::SELECT_THREADS_FOR_SUBGROUP,
+            $queryResult = self::$uniqueInstance->executeAndFetchAll(
+                'SELECT * FROM select_threads_for_subgroup(?);',
                 [$subgroupId]
             );
         }
@@ -55,8 +45,8 @@ class GroupRepository extends Repository {
     }
 
     public function createGroup(Group $group) {
-        $queryResult = $this->insert(
-            self::INSERT_GROUP,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT insert_group(?, ?, ?);',
             [
                 $group->getFullName(),
                 $group->getShortName(),
@@ -67,8 +57,8 @@ class GroupRepository extends Repository {
     }
 
     public function createSubgroup(Subgroup $subgroup, $groupId) {
-        $queryResult = $this->insert(
-            self::INSERT_SUBGROUP,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT insert_subgroup(?, ?, ?);',
             [
                 $groupId,
                 $subgroup->getFullName(),
@@ -79,8 +69,8 @@ class GroupRepository extends Repository {
     }
 
     public function createThread(Thread $thread) {
-        $queryResult = $this->insert(
-            self::INSERT_THREAD,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT insert_thread(?, ?);',
             [
                 $thread->getSubgroupId(),
                 $thread->getName()
@@ -89,58 +79,86 @@ class GroupRepository extends Repository {
         return $queryResult['insert_subgroup'];
     }
 
+    public function deleteGroup($groupId) {
+        self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM delete_group(:_id_groups);',
+            [$groupId]
+        );
+    }
+
+    public function deleteSubgroup($subgroupId) {
+        self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM delete_subgroup(:_id_subgroups);',
+            [$subgroupId]
+        );
+    }
+
+    public function deleteThread($threadId) {
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM delete_thread(:_id_threads);',
+            [$threadId]
+        );
+        return $queryResult['insert_subgroup'];
+    }
+
+    public function setAdminForGroup($groupId, $userId) {
+        self::$uniqueInstance->executeAndFetch(
+            'SELECT insert_admin_into_users_types_in_groups(:_id_users, :_id_groups);',
+            [$userId, $groupId]
+        );
+    }
+
     public function optInUserToGroup($userId, $groupAccessPassword) {
-//        TODO: zmienić NULL w funkcji SQL
-        $queryResult = $this->insert(
-            self::OPT_IN_USER_TO_GROUP,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM opt_in_user_to_group(?, ?);',
             [$userId, $groupAccessPassword]
         );
         return $queryResult['opt_in_user_to_group'];
     }
 
     public function optOutUserFromGroup($userId, $groupId) {
-        $queryResult = $this->insert(
-            self::OPT_OUT_USER_FROM_GROUP,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM opt_out_user_from_group(?, ?);',
             [$userId, $groupId]
         );
         return $queryResult['opt_out_user_from_group'];
     }
 
     public function optInUserToSubgroup($userId, $subgroupId) {
-        $queryResult = $this->insert(
-            self::OPT_IN_USER_TO_SUBGROUP,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM opt_in_user_to_subgroup(?, ?);',
             [$userId, $subgroupId]
         );
         return $queryResult['opt_in_user_to_subgroup'];
     }
 
     public function optOutUserFromSubgroup($userId, $subgroupId) {
-        $queryResult = $this->insert(
-            self::OPT_OUT_USER_FROM_SUBGROUP,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM opt_out_user_from_subgroup(?, ?);',
             [$userId, $subgroupId]
         );
         return $queryResult['opt_out_user_from_subgroup'];
     }
 
     public function optInUserToThread($userId, $threadId) {
-        $queryResult = $this->insert(
-            self::OPT_IN_USER_TO_THREAD,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM opt_in_user_to_thread(?, ?);',
             [$userId, $threadId]
         );
         return $queryResult['opt_in_user_to_thread'];
     }
 
     public function optOutUserFromThread($userId, $threadId) {
-        $queryResult = $this->insert(
-            self::OPT_OUT_USER_FROM_THREAD,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM opt_out_user_from_thread(?, ?);',
             [$userId, $threadId]
         );
         return $queryResult['opt_out_user_from_thread'];
     }
 
     private function getGroupsForUser($userId): array {
-        $queryResult = $this->select(
-            self::SELECT_GROUPS_FOR_USER,
+        $queryResult = self::$uniqueInstance->executeAndFetchAll(
+            'SELECT * FROM select_groups_for_user(?);',
             [$userId]
         );
         return $this->convertDatabaseResultToObjects($queryResult, 'Group');
@@ -162,13 +180,13 @@ class GroupRepository extends Repository {
 
     private function getSubgroups($groupId, $userId=NULL): array {
         if ($userId) {
-            $queryResult = $this->select(
-                self::SELECT_SUBGROUPS_FOR_USER_AND_GROUP,
+            $queryResult = self::$uniqueInstance->executeAndFetchAll(
+                'SELECT * FROM select_subgroups_for_user_and_group(?, ?);',
                 [$userId, $groupId]
             );
         } else {
-            $queryResult = $this->select(
-                self::SELECT_SUBGROUPS_FOR_GROUP,
+            $queryResult = self::$uniqueInstance->executeAndFetchAll(
+                'SELECT * FROM select_subgroups_for_group(?);',
                 [$groupId]
             );
         }
@@ -220,4 +238,3 @@ class GroupRepository extends Repository {
         );
     }
 }
-?>

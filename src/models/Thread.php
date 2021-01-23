@@ -1,9 +1,9 @@
 <?php
 
 class Thread {
-    private $threadId;
-    private $subgroupId;
-    private $name;
+    private ?string $threadId;
+    private string $subgroupId;
+    private string $name;
 
     public function __construct(
         ?string $threadId,
@@ -15,7 +15,7 @@ class Thread {
         $this->name = $name;
     }
 
-    public function getSubgroupId() {
+    public function getSubgroupId(): string {
         return $this->subgroupId;
     }
     
@@ -27,4 +27,3 @@ class Thread {
         return $this->name;
     }
 }
-?>

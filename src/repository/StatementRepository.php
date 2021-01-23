@@ -5,37 +5,34 @@ require_once __DIR__ . '/../models/Attachment.php';
 require_once __DIR__ . '/../models/Statement.php';
 
 class StatementRepository extends Repository {
-    const INSERT_STATEMENT = 'SELECT insert_statement(?, ?, ?, ?, ?);';
-    const INSERT_ATTACHMENT = 'SELECT insert_attachment(?, ?, ?);';
-    const ASSOCIATE_STATEMENT_WITH_ATTACHMENT = 'SELECT associate_statement_with_attachment(?, ?);';
-    const SELECT_ATTACHMENTS_FOR_STATEMENT = 'SELECT * FROM select_attachments_for_statement(?);';
-    const ASSOCIATE_STATEMENT_WITH_THREAD = 'SELECT associate_statement_with_thread(?, ?);';
-    const SELECT_STATEMENTS_FOR_USER_AND_SUBGROUP = 'SELECT * FROM select_statements_for_user_and_subgroup(?, ?);';
-    const CHANGE_STATEMENT = 'SELECT * FROM change_statement(?, ?, ?, ?, ?, ?);';
+    protected static ?Repository $uniqueInstance;
+
+    public function __construct() {
+        self::$uniqueInstance = Repository::getInstance();
+    }
 
     public function addStatement(Statement $statement) {
-        $queryResult = $this->insert(
-            self::INSERT_STATEMENT,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT insert_statement(?, ?, ?, ?, ?);',
             [
-                $statement->getHeader(),  // TODO: fix empty string
+                $statement->getHeader(),
                 $statement->getContent(),
-                $statement->getCreationDate()->format('d.m.Y H:i:s'),  // TODO: check data format, ponżej poprawny?
+                $statement->getCreationDate()->format('c'),
                 $_SESSION['userId'],
                 $statement->getSourceURL()
             ]
         );
         return $queryResult['insert_statement'];
-        // TODO: approve_date, id_approve_user
     }
 
     public function editStatement(Statement $statement) {
-        $queryResult = $this->update(
-            self::CHANGE_STATEMENT,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM change_statement(?, ?, ?, ?, ?, ?);',
             [
                 $statement->getStatementId(),
                 $statement->getHeader(),
                 $statement->getContent(),
-                $statement->getCreationDate()->format('Y-m-d H:i:s'),
+                $statement->getCreationDate()->format('c'),
                 $_SESSION['userId'],
                 $statement->getSourceURL()
             ]
@@ -43,47 +40,45 @@ class StatementRepository extends Repository {
         return $queryResult['change_statement'];
     }
 
-//    public function confirmStatement(Statement $statement) {
     public function confirmStatement($userId, $statementId, $approveDate) {
-        $queryResult = $this->update(
+        $queryResult = self::$uniqueInstance->executeAndFetch(
             'SELECT * FROM confirm_statement(:userId, :statementId, :approveDate);',
             [$userId, $statementId, $approveDate]
         );
-        return $queryResult['change_statement'];  // TODO: __
+        return $queryResult['confirm_statement'];
     }
 
     public function undoConfirmStatement($userId, $statementId) {
-        $queryResult = $this->update(
+        $queryResult = self::$uniqueInstance->executeAndFetch(
             'SELECT * FROM undo_confirm_statement(?, ?);',
             [$userId, $statementId]
         );
-        return $queryResult['change_statement'];  // TODO: __
+        return $queryResult['undo_confirm_statement'];
     }
 
     public function addAttachment($file, $statementId) {
-        $queryResult = $this->insert(
-            self::INSERT_ATTACHMENT,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT insert_attachment(?, ?);',
             [
                 $file->getName(),
-                $file->getName(), //TODO: zmienić
                 $file->getType()
             ]
         );
         $attachmentId = $queryResult['insert_attachment'];
 
-        $this->insert(
-            self::ASSOCIATE_STATEMENT_WITH_ATTACHMENT,
+        self::$uniqueInstance->executeAndFetch(
+            'SELECT associate_statement_with_attachment(?, ?);',
             [
                 $statementId,
                 $attachmentId
             ]
-            );
+        );
         return $attachmentId;
     }
 
     public function associateStatementWithThread($statementId, $threadId) {
-        $queryResult = $this->insert(
-            self::ASSOCIATE_STATEMENT_WITH_THREAD,
+        $queryResult = self::$uniqueInstance->executeAndFetch(
+            'SELECT associate_statement_with_thread(?, ?);',
             [
                 $statementId,
                 $threadId
@@ -92,22 +87,47 @@ class StatementRepository extends Repository {
         return $queryResult['associate_statement_with_thread'];
     }
 
-    public function getStatements($userId, $subgroupId): array {
-        $queryResult = $this->select(
-            self::SELECT_STATEMENTS_FOR_USER_AND_SUBGROUP,
-            [
-                $userId, 
-                $subgroupId
-            ]
+    public function getStatement($statementId): Statement {
+        $queryResult = self::$uniqueInstance->executeAndFetchAll(
+            'SELECT * FROM select_statement_for_id(?);',
+            [$statementId]
         );
         $statements = $this->convertDatabaseResultToObjects($queryResult, 'Statement');
+        $this->getAttachmentsForStatements($statements);
+        return $statements[0];
+    }
+
+    public function getStatements($userId, $subgroupId): array {
+        $queryResult = self::$uniqueInstance->executeAndFetchAll(
+            'SELECT * FROM select_statements_for_user_and_subgroup(?, ?);',
+            [$userId, $subgroupId]
+        );
+        $statements = $this->convertDatabaseResultToObjects($queryResult, 'Statement');
+        $this->getAttachmentsForStatements($statements);
+        return $statements;
+    }
+
+    public function getStatementsLastWeek($userId): array {
+        $queryResult = self::$uniqueInstance->executeAndFetchAll(
+            'SELECT * FROM select_statements_for_user_and_last_week(?);',
+            [$userId]
+        );
+        $statements = $this->convertDatabaseResultToObjects($queryResult, 'Statement');
+        $this->getAttachmentsForStatements($statements);
+        return $statements;
+    }
+
+    public function removeStatement($statementId) {
+        self::$uniqueInstance->executeAndFetch(
+            'SELECT * FROM delete_statement(?);',
+            [$statementId]
+        );
+    }
+
+    private function getAttachmentsForStatements(array $statements) {
         foreach ($statements as $statement) {
-            // TODO: przyspieszyć/zmiejszyć liczbę zapytań do bazy
-                // tablica z kluczami i wartościami dla statements
-                // $tablicaResult = SELECT attachments, statements FROM ... WHERE id_attachments IN (SELECT statements for user)
-                // przypisanie każdego attachments z $tablicaResult do odpowiedniego statement
-            $queryResult = $this->select(
-                self::SELECT_ATTACHMENTS_FOR_STATEMENT,
+            $queryResult = self::$uniqueInstance->executeAndFetchAll(
+                'SELECT * FROM select_attachments_for_statement(?);',
                 [
                     $statement->getStatementId()
                 ]
@@ -117,7 +137,6 @@ class StatementRepository extends Repository {
                 $statement->addAttachment($attachment);
             }
         }
-        return $statements;
     }
 
     private function convertDatabaseResultToObjects(array $records, string $convertTo): array {
@@ -130,15 +149,18 @@ class StatementRepository extends Repository {
     }
     
     private function convertToStatement(array $statement): Statement {
+        $creationUser = new User($statement['id_creation_user'], $statement['email_creation_user']);
+        if ($statement['id_approve_user']) {
+            $approveUser = new User($statement['id_approve_user'], $statement['email_approve_user']);
+        }
         return new Statement(
             $statement['id_statements'],
             $statement['title'], 
             $statement['content'], 
-            new DateTime($statement['creation_date']),  // TODO: zmienić
-            $statement['id_creation_user'],
+            new DateTime($statement['creation_date']),
+            $creationUser,
              $statement['approve_date'] ? new DateTime($statement['approve_date']) : null,
-             $statement['id_approve_user'],
-            // ' ',  // TODO: attachments
+             $approveUser,
             $statement['source_url'] ?: null,
         );
     }
@@ -146,10 +168,8 @@ class StatementRepository extends Repository {
     private function convertToAttachment(array $attachment): Attachment {
         return new Attachment(
             $attachment['id_attachments'],
-            $attachment['filename'], 
-            $attachment['server_filename'], 
+            $attachment['filename'],
             $attachment['type']
         );
     }
 }
-?>

@@ -19,6 +19,3 @@ services:
             dockerfile: docker/php/Dockerfile
         volumes:
             - .:/app/
-
-    # db:
-        # TODO: add postgres

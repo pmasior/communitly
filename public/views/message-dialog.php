@@ -1,6 +1,6 @@
 <div class="dialog-background js-message-dialog-background"></div>
 <div class="dialog js-message-dialog">
-    <?php if(isset($messages)): ?>
+    <?php if (isset($messages) && is_iterable($messages)): ?>
         <?php foreach ($messages as $message): ?>
             <span class="error"><?= $message; ?></span>
         <?php endforeach; ?>

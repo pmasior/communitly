@@ -4,8 +4,8 @@ require_once __DIR__ . '/../repository/GroupRepository.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 
 class SettingsModificationController extends AppController {
-    private $groupRepository;
-    private $userRepository;
+    private GroupRepository $groupRepository;
+    private UserRepository $userRepository;
 
     public function __construct() {
         parent::__construct();
@@ -15,7 +15,7 @@ class SettingsModificationController extends AppController {
 
     public function optOutThread($threadId) {
         (new Session())->handleSession(true);
-        $userId = $_SESSION['userId'];  // TODO: safe_input
+        $userId = $_SESSION['userId'];
         $this->groupRepository->optOutUserFromThread($userId, $threadId);
         header('Location: /settings');
     }
@@ -27,7 +27,6 @@ class SettingsModificationController extends AppController {
         header('Location: /settings');
     }
 
-//    TODO: join, quit
     public function optInGroup() {
         (new Session())->handleSession(true);
         $userId = $_SESSION['userId'];
@@ -87,10 +86,12 @@ class SettingsModificationController extends AppController {
 
     private function changePasswordIfExpected($userId, $realPassword, $oldPassword, $newPassword, $confirmedNewPassword) {
         if ($newPassword !== $confirmedNewPassword) {
-            return $this->render('settings', ['messages' => ['Passwords are different']]);
+            $this->render('settings', ['messages' => ['Passwords are different']]);
+            return;
         }
         if ($oldPassword && $realPassword !== $oldPassword) {
-            return $this->render('settings', ['messages' => ['Actual password is different']]);
+            $this->render('settings', ['messages' => ['Actual password is different']]);
+            return;
         }
         if ($newPassword) {
             $password = password_hash($newPassword, PASSWORD_DEFAULT);

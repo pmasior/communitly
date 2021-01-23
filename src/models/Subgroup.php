@@ -1,10 +1,11 @@
 <?php
+require_once 'Thread.php';
 
 class Subgroup {
-    private $subgroupId;
-    private $fullName;
-    private $shortName;
-    private $threads = [];
+    private ?string $subgroupId;
+    private string $fullName;
+    private string $shortName;
+    private array $threads = [];
 
     public function __construct(
         ?string $subgroupId,
@@ -16,7 +17,7 @@ class Subgroup {
         $this->shortName = $shortName;
     }
 
-    public function getSubgroupId() {
+    public function getSubgroupId(): ?string {
         return $this->subgroupId;
     }
     
@@ -40,4 +41,3 @@ class Subgroup {
         $this->threads = $threads;
     }
 }
-?>

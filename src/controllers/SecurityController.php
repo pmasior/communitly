@@ -1,32 +1,35 @@
 <?php
 require_once 'AppController.php';
+require_once __DIR__ . '/../exceptions/NotFoundUserException.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 
 class SecurityController extends AppController {
-    private $userRepository;
+    private UserRepository $userRepository;
 
     public function __construct() {
         parent::__construct();
         $this->userRepository = new UserRepository();
     }
 
-    public function signIn() {
+    public function signIn():void {
         (new Session())->handleSession(false);
         if (!$this->isPost()) {
             header('Location: /');
         }
 
         $email = $_POST['email'];
-        $password = $_POST['pass'];
+        $password = $_POST['password'];
 
         try {
             $user = $this->userRepository->getUserForEmail($email);
-        } catch (Exception $e) {  // TODO: change type of exception
-            return $this->render('login', ['messages' => ['User with this email not exist']]);
+        } catch (NotFoundUserException $e) {
+            $this->render('login', ['messages' => ['User with this email not exist']]);
+            return;
         }
 
         if (!password_verify($password, $user->getPassword())) {
-            return $this->render('login', ['messages' => ['Wrong password']]);
+            $this->render('login', ['messages' => ['Wrong password']]);
+            return;
         }
 
         $permissions = $this->userRepository->getPermissions($user->getUserId());
@@ -42,7 +45,7 @@ class SecurityController extends AppController {
         header('Location: /dashboard');
     }
 
-    public function signUp() {
+    public function signUp(): void {
         (new Session())->handleSession(false);
         if (!$this->isPost()) {
             header('Location: /');
@@ -55,7 +58,8 @@ class SecurityController extends AppController {
         $lastName = $_POST['lastName'];
 
         if ($password !== $confirmedPassword) {
-            return $this->render('register', ['messages' => ['Passwords are different']]);
+            $this->render('register', ['messages' => ['Passwords are different']]);
+            return;
         }
 
         $password = password_hash($password, PASSWORD_DEFAULT);
@@ -71,10 +75,10 @@ class SecurityController extends AppController {
         header('Location: /');
     }
 
-    public function logout() {
+    public function logout(): void {
         (new Session())->handleSession(false);
         session_unset();
         session_destroy();
-        return $this->render('login', ['messages' => ['You have been successfully logged out']]);
+        $this->render('login', ['messages' => ['You have been successfully logged out']]);
     }
 }

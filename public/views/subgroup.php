@@ -9,14 +9,14 @@
     <script type="text/javascript" src="/public/js/form_validation.js" defer></script>
     <script type="text/javascript" src="/public/js/dialog.js" defer></script>
     <script type="text/javascript" src="/public/js/message-dialog.js" defer></script>
-    <title><?= $subgroup->getFullName(); ?> - Communitly</title>
+    <title><?= $openSubgroup->getFullName(); ?> - Communitly</title>
 </head>
 <body>
     <?php include('header-and-nav.php'); ?>
     <main>
         <?php include('message-dialog.php'); ?>
         <div class="main-title">
-            <h1><?= $subgroup->getFullName(); ?></h1>
+            <h1><?= $openSubgroup->getFullName(); ?></h1>
             <?php foreach ($activeThreads as $thread): ?>
                 <p class="thread-name"><?= $thread->getName(); ?></p>
             <?php endforeach; ?>
@@ -38,9 +38,9 @@
                     <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
                 </h4>
                 <form action="/addStatement" method="post" enctype="multipart/form-data">
-                    <input type="text" class='input-with-text' name='statement-header' placeholder="Nagłówek">
-                    <input type="text" class='input-with-text' name='statement-url' placeholder="Link do źródła">
-                    <textarea name="statement-content" class='input-with-text' placeholder="Treść nowego komunikatu"></textarea>
+                    <input type="text" class='input-with-text' name='statementHeader' placeholder="Nagłówek">
+                    <input type="text" class='input-with-text' name='statementURL' placeholder="Link do źródła">
+                    <textarea name="statementContent" class='input-with-text' placeholder="Treść nowego komunikatu"></textarea>
                     <?php foreach ($allThreadsInSubgroup as $thread): ?>
                         <span>
                             <label>
@@ -58,23 +58,37 @@
                 <div class="widget">
                     <h2><?= $statement->getHeader(); ?></h2>
                     <?php if ($permission == 1): ?>
-                    <a href="#" class="small-action-button">
+                    <a href="#" class="small-action-button js-dialog-activator">
                         <i class="fas fa-minus-square fa-hover-hidden"></i>
                         <i class="far fa-minus-square fa-hover-show"></i>
-                    </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                    </a>
+                    <div class="dialog-background js-dialog-background"></div>
+                    <div class="dialog js-dialog">
+                        <h1>Usuwanie komunikatu</h1>
+                        <h4>
+                            <span class="group-name"><?= $group->getFullName(); ?></span>
+                            <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
+                        </h4>
+                        <p>Czy napewno chcesz usunać komunikat <?= $statement->getHeader(); ?>?</p>
+                        <form action="/removeStatement" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name='statementId' value="<?= $statement->getStatementId() ?>">
+                            <input type="submit" class='button button-in-form' value="Potwierdź">
+                        </form>
+                    </div>
+
                     <a href="#" class="small-action-button js-dialog-activator">
                         <i class="fas fa-pen-square fa-hover-hidden"></i>
                         <i class="fas fa-pen-square fa-hover-show"></i>
-                    </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                    </a>
                     <div class="dialog-background js-dialog-background"></div>
                     <div class="dialog js-dialog">
                         <h1>Edycja komunikatu</h1>
                         <form action="/editStatement" method="post">
                             <h4><?= $statement->getHeader(); ?></h4>
                             <input type="hidden" name='statementId' value="<?= $statement->getStatementId() ?>">
-                            <input type="text" class='input-with-text' name='statement-header' placeholder="Nagłówek" value="<?= $statement->getHeader(); ?>">
-                            <input type="text" class='input-with-text' name='statement-url' placeholder="Link do źródła" value="<?= $statement->getSourceURL(); ?>">
-                            <textarea name="statement-content" class='input-with-text' placeholder="Treść nowego komunikatu"><?= $statement->getContent(); ?></textarea>
+                            <input type="text" class='input-with-text' name='statementHeader' placeholder="Nagłówek" value="<?= $statement->getHeader(); ?>">
+                            <input type="text" class='input-with-text' name='statementURL' placeholder="Link do źródła" value="<?= $statement->getSourceURL(); ?>">
+                            <textarea name="statementContent" class='input-with-text' placeholder="Treść nowego komunikatu"><?= $statement->getContent(); ?></textarea>
                             <?php foreach ($allThreadsInSubgroup as $thread): ?>
                             <span>
                                 <label>
@@ -89,7 +103,6 @@
                     <a href="#" class="small-action-button js-dialog-activator">
                         <i class="fas fa-check-square fa-hover-hidden"></i>
                         <i class="far fa-check-square fa-hover-show"></i>
-<!--                        --><?//= $statement->getApproveDate() . 'n'?>
                     </a>
                     <div class="dialog-background js-dialog-background"></div>
                     <div class="dialog js-dialog">
@@ -115,100 +128,81 @@
 
                     <? endif; ?>
 
-                    <p class="date-and-source">
-                        <?php if ($statement->getApproveDate()): ?>
-                        <span title='Dodane <?= $statement->getCreationDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?> \nZweryfikowane <?= $statement->getApproveDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?>'>
-                            <i class='fas fa-check-circle verified-statement'></i>
-                        </span>
-                        <?php else: ?>
-                        <span title='Dodane <?= $statement->getCreationDate()->format('d.m.Y H:i:s') ?> przez <?= 1234; ?>'>
-                            <i class='fas fa-exclamation-circle unverified-statement'></i>
-                        </span>
-                        <?php endif; ?>
-                        <?= $statement->getCreationDate()->format('d.m.Y H:i:s'); ?>
-                        <?php if ($statement->getSourceURL()): ?>
-                        z <a href="<?= $statement->getSourceURL(); ?>">
-                            <?php preg_match("/:\/\/(\S+\.\w+)/", $statement->getSourceURL(), $url); ?>
-                            <?= $url[1]; ?>
-                        </a>
-                        <?php endif; ?>
-                    </p>
-
-                    <p><?= $statement->getContent(); ?></p>
-                    <?php foreach ($statement->getAttachments() as $attachment): ?>
-                        <a href="<?= '/public/uploads/' . $attachment->getFilename(); ?>" class="attachment">
-                            <i class="fas fa-paperclip"></i>
-                            <?= $attachment->getFilename(); ?>
-                        </a>
-                    <?php endforeach; ?>
+                    <?php include('statement-content.php'); ?>
                 </div>
             <?php endforeach; ?>
-
-            <div class="widget">
-                <h3><a class="archived" href="#">Zobacz zarchiwizowane komunikaty</a></h3>
-            </div>
         </div>
 
         
         <div class="links">
-            <h3 class="widget-group">Linki</h3>
+            <div class="widget-group-header">
+                <h3 class="widget-group">Linki</h3>
+                <?php if ($permission == 1): ?>
+                <a href="#" class="js-dialog-activator">
+                    <i class="fas fa-plus-square fa-hover-hidden"></i>
+                    <i class="far fa-plus-square fa-hover-show"></i>
+                </a>
+                <?php endif; ?>
+            </div>
+
+            <?php if ($permission == 1): ?>
+            <div class="dialog-background js-dialog-background"></div>
+            <div class="dialog js-dialog">
+                <h1>Dodawanie linku</h1>
+                <h4>
+                    <span class="group-name"><?= $group->getFullName(); ?></span>
+                    <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
+                </h4>
+                <form action="/addLink" method="post" enctype="multipart/form-data">
+                    <input type="text" class='input-with-text' name='linkName' placeholder="Nazwa">
+                    <input type="text" class='input-with-text' name='linkURL' placeholder="Link">
+                    <textarea name="linkNote" class='input-with-text' placeholder="Notatka"></textarea>
+                    <?php foreach ($allThreadsInSubgroup as $thread): ?>
+                        <span>
+                            <label>
+                                <input type="checkbox" class='checkbox-in-form' name="thread[]" placeholder="Wątki" value='<?= $thread->getThreadId(); ?>'>
+                                <?= $thread->getName(); ?>
+                            </label>
+                        </span>
+                    <?php endforeach; ?>
+                    <input type="submit" class='button button-in-form' value="Wyślij">
+                </form>
+            </div>
+            <?php endif; ?>
+
             <div class="widget">
-                <h2>Wykłady</h2>
                 <ul>
+                    <?php foreach ($links as $link): ?>
                     <li class="record-in-links">
-                        <a href="https://example.com">
-                            <i class="fa fa-link"></i>
-                            Zdalne wykłady (app)
+                        <?php if ($permission == 1): ?>
+                        <a href="#" class="small-action-button js-dialog-activator">
+                            <i class="fas fa-minus-square fa-hover-hidden"></i>
+                            <i class="far fa-minus-square fa-hover-show"></i>
                         </a>
-                        <!-- TODO: dodać odpowiednie kolory dla ikon [JavaScript] -->
-                    </li>
-                    <li class="record-in-links">
-                        <a href="https://example.com">
+                        <div class="dialog-background js-dialog-background"></div>
+                        <div class="dialog js-dialog">
+                            <h1>Usuwanie linku</h1>
+                            <h4>
+                                <span class="group-name"><?= $group->getFullName(); ?></span>
+                                <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
+                            </h4>
+                            Czy napewno chcesz usunać link <?= $link->getTitle(); ?>?
+                            <form action="/removeLink" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name='linkId' value="<?= $link->getLinkId(); ?>">
+                                <input type="submit" class='button button-in-form' value="Potwierdź">
+                            </form>
+                        </div>
+                        <?php endif; ?>
+
+                        <a href="<?= $link->getUrl(); ?>">
                             <i class="fa fa-link"></i>
-                            Zdalne wykłady (www)
+                            <?= $link->getTitle(); ?>
                         </a>
+                        <p><?= $link->getNote(); ?></p>
                     </li>
-                    <li class="record-in-links">
-                        <a href="https://example.com">
-                            <i class="fa fa-link"></i>
-                            Materiały z zajęć (www)
-                        </a>
-                    </li>
-                    <li class="record-in-links">
-                        <!-- TODO: zmienić styl, zmienić action="" -->
-                        <form action="login" method="post" enctype="multipart/form-data">
-                            <input type="url" name='link-url' placeholder="Link">
-                            <input type="text" name='link-header' placeholder="Nazwa">
-                            <textarea name="link-note" placeholder="Notatka"></textarea>
-                            <input type="submit" value="Wyślij wiadomość">
-                        </form>
-                    </li>
+                    <?php endforeach; ?>
                 </ul>
             </div>
-            <div class="widget">
-                <h2>Laboratoria</h2>
-                <ul>
-                    <li class="record-in-links">
-                        <a href="https://example.com">
-                            <i class="fa fa-link"></i>
-                            Zdalne laboratoria (Zoom)
-                        </a>
-                    </li>
-                    <li class="record-in-links">
-                        <a href="https://example.com">
-                            <i class="fa fa-link"></i>
-                            Materiały z zajęć (www)
-                        </a>
-                    </li>
-                    <li class="record-in-links">
-                        <a href="mailto:example@example.com">
-                            <i class="fa fa-link"></i>
-                            Przesyłanie zadań (email)
-                        </a>
-                        <p>Na adres email: example@example.com<br>
-                        Temat i nazwa pliku: [_] Imie Nazwisko</p>
-                    </li>
-                </ul>
             </div>
 
         </div>

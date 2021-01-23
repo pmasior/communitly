@@ -440,7 +440,8 @@ nav {
  * -----------------------------------------------------
  */
 
-.js-input-invalid {
+.js-input-invalid,
+.js-input-invalid:focus {
     border-bottom-color: var(--color-error);
 }
 

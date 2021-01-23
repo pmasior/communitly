@@ -35,7 +35,7 @@
                 <a href="#" class="js-dialog-activator">
                     <i class="fas fa-plus-square fa-hover-hidden"></i>
                     <i class="far fa-plus-square fa-hover-show"></i>
-                </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                </a>
                 <div class="dialog-background js-dialog-background"></div>
                 <div class="dialog js-dialog">
                     <h1>Dołączanie do grupy</h1>
@@ -98,15 +98,14 @@
                 <a href="#" class="js-dialog-activator">
                     <i class="fas fa-plus-square fa-hover-hidden"></i>
                     <i class="far fa-plus-square fa-hover-show"></i>
-                </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                </a>
                 <div class="dialog-background js-dialog-background"></div>
                 <div class="dialog js-dialog">
                     <h1>Tworzenie nowej grupy</h1>
-                    <form action="/createGroup" method="post"> <!-- TODO: action -->
+                    <form action="/createGroup" method="post">
                         <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
                         <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
                         <input type="submit" class='button button-in-form' value="Zatwierdź">
-<!--                        TODO: zwracanie access_password -->
                     </form>
                 </div>
             </div>
@@ -119,13 +118,12 @@
                             <a href="#" class="js-dialog-activator">
                                 <i class="fas fa-minus-square fa-hover-hidden"></i>
                                 <i class="far fa-minus-square fa-hover-show"></i>
-                            </a>  <!-- TODO: tworzenie grup, subgrup i wątków -->
+                            </a>
                             <div class="dialog-background js-dialog-background"></div>
                             <div class="dialog js-dialog">
                                 <h1>Usuwanie grupy</h1>
-                                <form action="/createGroup" method="post"> <!-- TODO: action -->
-                                    <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
-                                    <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                                <form action="/deleteGroup" method="post">
+                                    <input type="hidden" name='groupId' value="<?= $group->getGroupId() ?>">
                                     <input type="submit" class='button button-in-form' value="Zatwierdź">
                                 </form>
                             </div>
@@ -139,11 +137,10 @@
                                 </a>
                                 <div class="dialog-background js-dialog-background"></div>
                                 <div class="dialog js-dialog">
-<!--                                    TODO: Usuwanie grupy, podgrupy, wątku-->
                                     <h1>Usuwanie podgrupy</h1>
-                                    <form action="/createGroup" method="post"> <!-- TODO: action -->
-                                        <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
-                                        <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                                    <form action="/deleteSubgroup" method="post">
+                                        <input type="hidden" name='groupId' value="<?= $group->getGroupId() ?>">
+                                        <input type="hidden" name='subgroupId' value="<?= $subgroup->getSubgroupId() ?>">
                                         <input type="submit" class='button button-in-form' value="Zatwierdź">
                                     </form>
                                 </div>
@@ -158,11 +155,11 @@
                                     <div class="dialog-background js-dialog-background"></div>
                                     <div class="dialog js-dialog">
                                         <h1>Usuwanie wątku</h1>
-                                        <form action="/createGroup" method="post"> <!-- TODO: action -->
-                                            <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
-                                            <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">
+                                        <p>Wszyscy użytkownicy zostaną wypisani z wątku, a następnie wątek zostanie usunięty</p>
+                                        <form action="/deleteThread" method="post">
+                                            <input type="hidden" name='groupId' value="<?= $group->getGroupId() ?>">
+                                            <input type="hidden" name='threadId' value="<?= $thread->getThreadId() ?>">
                                             <input type="submit" class='button button-in-form' value="Zatwierdź">
-                                            <!--                        TODO: zwracanie access_password -->
                                         </form>
                                     </div>
                                 </li>
@@ -176,7 +173,7 @@
                                     <div class="dialog-background js-dialog-background"></div>
                                     <div class="dialog js-dialog">
                                         <h1>Dodawanie wątku</h1>
-                                        <form action="/createThread" method="post"> <!-- TODO: action -->
+                                        <form action="/createThread" method="post">
                                             <input type="hidden" name='subgroupId' value="<?= $subgroup->getSubgroupId() ?>">
                                             <input type="text" class='input-with-text' name='name' placeholder="Nazwa">
                                             <input type="submit" class='button button-in-form' value="Zatwierdź">
@@ -194,7 +191,7 @@
                                 <div class="dialog-background js-dialog-background"></div>
                                 <div class="dialog js-dialog">
                                     <h1>Dodawanie podgrupy</h1>
-                                    <form action="/createSubgroup" method="post"> <!-- TODO: action -->
+                                    <form action="/createSubgroup" method="post">
                                         <input type="hidden" name='groupId' value="<?= $group->getGroupId() ?>">
                                         <input type="text" class='input-with-text' name='fullName' placeholder="Pełna nazwa">
                                         <input type="text" class='input-with-text' name='shortName' placeholder="Skrócona nazwa">

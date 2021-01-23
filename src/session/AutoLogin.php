@@ -2,9 +2,8 @@
 require_once __DIR__ . '/../repository/SessionRepository.php';
 require_once __DIR__ . '/../session/Session.php';
 
-class AutoLogin
-{
-    private $sessionRepository;
+class AutoLogin {
+    private SessionRepository $sessionRepository;
 
     public function __construct() {
         $this->sessionRepository = new SessionRepository();
@@ -18,7 +17,6 @@ class AutoLogin
     }
 
     public function verifySession(bool $redirectIfNotLogged = true) {
-        //    TODO: delete old AutoLogin
         $userId = $this->checkAutoLoginSession();
         if (!$userId) {
             $this->endSession($redirectIfNotLogged);

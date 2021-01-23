@@ -4,18 +4,22 @@ require_once __DIR__ . '/../repository/GroupRepository.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 
 class SettingsController extends AppController {
-    private $groupRepository;
+    private GroupRepository $groupRepository;
+    private UserRepository $userRepository;
 
     public function __construct() {
         parent::__construct();
         $this->groupRepository = new GroupRepository();
+        $this->userRepository = new UserRepository();
     }
 
-    public function settings() {
+    public function settings($messages = NULL) {
         (new Session())->handleSession(true);
         $userFirstname = $_SESSION['userFirstName'];
         $userLastName = $_SESSION['userLastName'];
         $userEmail = $_SESSION['email'];
+        $_SESSION['permissions'] = $this->userRepository->getPermissions($_SESSION['userId']);
+
         $userPermissions = $_SESSION['permissions'];
         $groupsInMenu = $this->groupRepository->getGroups($_SESSION['userId'], true, true, false);
         $availableGroups = $this->groupRepository->getGroups($_SESSION['userId'], true, true, true);
@@ -32,11 +36,12 @@ class SettingsController extends AppController {
             'availableGroups' => $availableGroups,
             'groupsIdForUser' => $groupsIdForUser,
             'subgroupsIdForUser' => $subgroupsIdForUser,
-            'threadsIdForUser' => $threadsIdForUser
+            'threadsIdForUser' => $threadsIdForUser,
+            'messages' => $messages
         ]);
     }
 
-    private function getGroupsIdForUser($groups) {
+    private function getGroupsIdForUser($groups): array {
         $result = [];
         foreach ($groups as $group) {
             $result[] = $group->getGroupId();
@@ -44,7 +49,7 @@ class SettingsController extends AppController {
         return $result;
     }
 
-    private function getSubgroupsIdForUser($groups) {
+    private function getSubgroupsIdForUser($groups): array {
         $result = [];
         foreach ($groups as $group) {
             foreach ($group->getSubgroups() as $subgroup) {
@@ -54,7 +59,7 @@ class SettingsController extends AppController {
         return $result;
     }
 
-    private function getThreadsIdForUser($groups) {
+    private function getThreadsIdForUser($groups): array {
         $result = [];
         foreach ($groups as $group) {
             foreach ($group->getSubgroups() as $subgroup) {
@@ -66,4 +71,3 @@ class SettingsController extends AppController {
         return $result;
     }
 }
-?>

@@ -3,7 +3,7 @@ require_once 'AppController.php';
 require_once __DIR__ . '/../repository/GroupRepository.php';
 
 class GroupController extends AppController {
-    private $groupRepository;
+    private GroupRepository $groupRepository;
 
     public function __construct() {
         parent::__construct();
@@ -15,7 +15,6 @@ class GroupController extends AppController {
         $fullName = $_POST['fullName'];
         $shortName = $_POST['shortName'];
         $accessPassword = $this->generateRandomAccessPassword();
-//        $hashedAccessPassword = password_hash($accessPassword, PASSWORD_DEFAULT);
 
         $group = new Group (
             NULL,
@@ -24,13 +23,9 @@ class GroupController extends AppController {
             $accessPassword
         );
         $groupId = $this->groupRepository->createGroup($group);
+        $this->groupRepository->setAdminForGroup($groupId, $_SESSION['userId']);
 
-        $this->render(
-            'settings',
-            ['messages' =>
-                ['Utworzyłeś grupę ' . $group->getFullName() . '. Hasło zapisu do grupy to: ' . $accessPassword]
-            ]);
-        return;
+        (new SettingsController())->settings(['Utworzyłeś grupę ' . $group->getFullName() . '. Hasło zapisu do grupy to: ' . $accessPassword]);
     }
 
     public function createSubgroup() {
@@ -64,9 +59,41 @@ class GroupController extends AppController {
         header("Location: /settings");
     }
 
+    public function deleteGroup() {
+        (new Session())->handleSession(true);
+        $groupId = $_POST['groupId'];
+
+        if ($_SESSION['permissions'][$groupId] == 1) {
+            $this->groupRepository->deleteGroup($groupId);
+            (new SettingsController())->settings(['Usunąłeś grupę']);
+        }
+    }
+
+    public function deleteSubgroup() {
+        (new Session())->handleSession(true);
+        $groupId = $_POST['groupId'];
+        $subgroupId = $_POST['subgroupId'];
+
+        if ($_SESSION['permissions'][$groupId] == 1) {
+            $this->groupRepository->deleteSubgroup($subgroupId);
+            (new SettingsController())->settings(['Usunąłeś podgrupę']);
+        }
+    }
+
+    public function deleteThread() {
+        (new Session())->handleSession(true);
+        $groupId = $_POST['groupId'];
+        $threadId = $_POST['threadId'];
+
+        if ($_SESSION['permissions'][$groupId] == 1) {
+            $this->groupRepository->deleteThread($threadId);
+            (new SettingsController())->settings(['Usunąłeś wątek']);
+        }
+    }
+
     private function generateRandomAccessPassword(): string {
         $passwordLength = 10;
-        $availableChars = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
+        $availableChars = '23456789qwertyuiopasdfghjkzxcvbnmQWERTYUIPASDFGHJKLZXCVBNM';
         $accessPassword = '';
 
         for ($i = 0; $i < $passwordLength; $i++) {

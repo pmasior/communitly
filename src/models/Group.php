@@ -1,11 +1,11 @@
 <?php
 
 class Group {
-    private $groupId;
-    private $fullName;
-    private $shortName;
-    private $accessPassword;
-    private $subgroups = [];
+    private ?string $groupId;
+    private string $fullName;
+    private string $shortName;
+    private string $accessPassword;
+    private array $subgroups = [];
 
     public function __construct(
         ?string $groupId,
@@ -19,7 +19,7 @@ class Group {
         $this->accessPassword = $accessPassword;
     }
 
-    public function getGroupId() {
+    public function getGroupId(): ?string {
         return $this->groupId;
     }
     
@@ -47,4 +47,3 @@ class Group {
         $this->subgroups = $subgroups;
     }
 }
-?>

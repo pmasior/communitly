@@ -1,25 +1,25 @@
 <?php
+require_once 'User.php';
 
 class Statement {
-    private $statementId;
-    private $title;
-    private $content;
-    private $creationDate;
-    private $creationUser;
-    private $approveDate;
-    private $approveUser;
-    private $attachments = [];
-    private $sourceURL;
+    private ?string $statementId;
+    private string $title;
+    private string $content;
+    private ?DateTime $creationDate;
+    private User $creationUser;
+    private ?DateTime $approveDate;
+    private ?User $approveUser;
+    private array $attachments = [];
+    private ?string $sourceURL;
 
     public function __construct(
         ?string $statementId,
         string $title, 
         string $content, 
         ?DateTime $creationDate, 
-        string $creationUser,
+        User $creationUser,
         ?DateTime $approveDate,
-        ?string $approveUser,
-        // $attachments, 
+        ?User $approveUser,
         ?string $sourceURL
     ) {
         $this->statementId = $statementId;
@@ -29,7 +29,6 @@ class Statement {
         $this->creationUser = $creationUser;
         $this->approveDate = $approveDate;
         $this->approveUser = $approveUser;
-        // $this->attachments = $attachments;
         $this->sourceURL = $sourceURL;
     }
 
@@ -57,6 +56,15 @@ class Statement {
         return $this->approveDate;
     }
 
+    public function getCreationUser(): User {
+        return $this->creationUser;
+    }
+
+    public function getApproveUser(): ?User {
+        return $this->approveUser;
+    }
+
+
     public function getSourceURL(): ?string {
         return $this->sourceURL;
     }
@@ -69,13 +77,7 @@ class Statement {
         $this->title = $title;
     }
 
-    // public function setAttachment(string $attachment) {
-    //     $this->attachment = $attachment;
-    // }
-
     public function addAttachment(Attachment $attachment) {
         $this->attachments[] = $attachment;
     }
 }
-
-?>

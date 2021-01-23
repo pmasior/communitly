@@ -11,6 +11,12 @@ Routing::get('register', 'DefaultController');
 Routing::get('createGroup', 'GroupController');
 Routing::get('createSubgroup', 'GroupController');
 Routing::get('createThread', 'GroupController');
+Routing::get('deleteGroup', 'GroupController');
+Routing::get('deleteSubgroup', 'GroupController');
+Routing::get('deleteThread', 'GroupController');
+
+Routing::post('addLink', 'LinkController');
+Routing::post('removeLink', 'LinkController');
 
 Routing::get('dashboard', 'SubgroupController');
 Routing::get('subgroup', 'SubgroupController');
@@ -32,6 +38,7 @@ Routing::post('addStatement', 'StatementController');
 Routing::post('editStatement', 'StatementController');
 Routing::post('confirmStatement', 'StatementController');
 Routing::post('undoConfirmStatement', 'StatementController');
+Routing::post('removeStatement', 'StatementController');
 
 Routing::post('changeUserData', 'SettingsModificationController');
 

@@ -14,14 +14,12 @@ class StatementController extends AppController {
         'image/png',  //png
         'image/jpg',  //jpg
         'image/jpeg',  //jpeg
-        'text/x-csrc',  //c (1)
-        'text/x-c',  //c (2, 3)ok
+        'text/x-csrc',  //c
+        'text/x-c',  //c
         'text/x-c++',  //c++
         'text/x-c++src',  //c++
         'text/x-python',  //py
         'text/plain',  //txt
-        //https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types
-        //https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
         'application/msword',  //doc
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',  //docx
         'application/vnd.ms-powerpoint', //ppt
@@ -31,15 +29,15 @@ class StatementController extends AppController {
         'application/vnd.oasis.opendocument.presentation',  //odp
         'application/x-sh',  //sh
         'text/x-shellscript',  //sh
-        // 'application/x-tar',  //tar
+        'application/x-tar',  //tar
         'application/x-rar-compressed',  //rar
         'application/x-7z-compressed',  //7z
         'image/gif'  //gif
     ];
-    const UPLOAD_DIRECTORY = '/public/uploads/'; // TODO: poprawne?
-    private $relativeUploadDirectory;
-    private $messages = [];
-    private $statementRepository;
+    const UPLOAD_DIRECTORY = '/public/uploads/';
+    private string $relativeUploadDirectory;
+    private array $messages = [];
+    private StatementRepository $statementRepository;
 
     public function __construct() {
         parent::__construct();
@@ -50,26 +48,15 @@ class StatementController extends AppController {
     public function addStatement() {
         (new Session())->handleSession(true);
         if (!$this->isPost() || !$this->isValidateStatement()) {
+            (new SubgroupController())->dashboard(['Brak danych w polach nagłówek, źródło lub zawartość']);
             header('Location: /dashboard');
         }
 
         $statement = $this->createStatementInstance();
         $statementId = $this->statementRepository->addStatement($statement);
 
-        if ($_POST['thread']) {
-            foreach ($_POST['thread'] as $thread) {
-                $this->statementRepository->associateStatementWithThread($statementId, $thread);
-            }
-        }
-
-        for ($i = 0; $i < count($_FILES['attachment']['tmp_name']); $i++) {
-            if ($_FILES['attachment']['error'][$i] == UPLOAD_ERR_OK) {
-                $file = $this->createFileInstance($i);
-                if ($this->moveFile($file)) {
-                    $attachmentId = $this->statementRepository->addAttachment($file, $statementId);
-                }
-            }
-        }
+        $this->associateStatementWithThread($statementId);
+        $this->addAttachments($statementId);
 
         header('Location: /dashboard');
     }
@@ -112,12 +99,65 @@ class StatementController extends AppController {
         $statement = $this->createStatementInstance();
         $statementId = $this->statementRepository->editStatement($statement);
 
+        $this->associateStatementWithThread($statementId);
+        $this->addAttachments($statementId);
+        header('Location: /dashboard');
+    }
+
+    public function removeStatement() {
+        (new Session())->handleSession(true);
+        if (!$this->isPost()) {
+            header('Location: /dashboard');
+        }
+        $statementId = $_POST['statementId'];
+        $statement = $this->statementRepository->getStatement($statementId);
+        foreach ($statement->getAttachments() as $attachment) {
+            $location = $this->relativeUploadDirectory . $attachment->getServerFilename();
+            if (file_exists($location)) {
+                unlink($location);
+            }
+        }
+        $this->statementRepository->removeStatement($statementId);
+        header('Location: /dashboard');
+    }
+
+    private function isValidateStatement(): bool {
+        return $_POST['statementHeader']
+            && $_POST['statementContent']
+            && $_POST['statementURL'];
+    }
+
+    private function createStatementInstance(): Statement {
+        return new Statement(
+            $_POST['statementId'],
+            $_POST['statementHeader'],
+            $_POST['statementContent'],
+            new DateTime(), 
+            new User($_SESSION['userId'], $_SESSION['email']),
+            NULL,
+            NULL,
+            $_POST['statementURL']
+        );
+    }
+
+    private function createFileInstance($i): File {
+        return new File(
+            $_FILES['attachment']['name'][$i],
+            $_FILES['attachment']['type'][$i],
+            $_FILES['attachment']['tmp_name'][$i],
+            $_FILES['attachment']['size'][$i]
+        );
+    }
+
+    private function associateStatementWithThread($statementId) {
         if ($_POST['thread']) {
             foreach ($_POST['thread'] as $thread) {
                 $this->statementRepository->associateStatementWithThread($statementId, $thread);
             }
         }
+    }
 
+    private function addAttachments($statementId) {
         for ($i = 0; $i < count($_FILES['attachment']['tmp_name']); $i++) {
             if ($_FILES['attachment']['error'][$i] == UPLOAD_ERR_OK) {
                 $file = $this->createFileInstance($i);
@@ -126,39 +166,6 @@ class StatementController extends AppController {
                 }
             }
         }
-
-        header('Location: /dashboard');
-
-    }
-
-    private function isValidateStatement() {
-        return $_POST['statement-header']
-            && $_POST['statement-content']
-            && $_POST['statement-url'];
-    }
-
-    private function createStatementInstance() {
-        return new Statement(
-            $_POST['statementId'],
-            $_POST['statement-header'], 
-            $_POST['statement-content'], 
-            new DateTime(), 
-            $_SESSION['userId'],
-            // NULL, 
-            // NULL, 
-            // $_FILES['attachment']['name'], 
-            $_POST['statement-url']
-        );
-    }
-
-    private function createFileInstance($i) {
-        return new File(
-            $_FILES['attachment']['name'][$i],
-            $_FILES['attachment']['type'][$i],
-            $_FILES['attachment']['tmp_name'][$i], 
-            $_FILES['attachment']['error'][$i],
-            $_FILES['attachment']['size'][$i]
-        );
     }
 
     private function moveFile($file): bool {
@@ -168,6 +175,7 @@ class StatementController extends AppController {
             ) {
             return move_uploaded_file($file->getTmpName(), $this->relativeUploadDirectory . $file->getName());
         }
+        return false;
     }
 
     private function isFilesizeValid($size): bool {

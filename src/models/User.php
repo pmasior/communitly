@@ -1,24 +1,28 @@
 <?php
 
 class User {
-    private $email;
-    private $password;
-    private $firstname;
-    private $lastname;
-    private $userId;
+    private string $email;
+    private ?string $password;
+    private ?string $firstname;
+    private ?string $lastname;
+    private ?int $userId;
 
     public function __construct(
         ?int $userId,
-        string $email, 
-        string $password, 
-        string $firstname, 
-        string $lastname
+        string $email,
+        ?string $password = NULL,
+        ?string $firstname = NULL,
+        ?string $lastname = NULL
     ) {
         $this->userId = $userId;
         $this->email = $email;
         $this->password = $password;
         $this->firstname = $firstname;
         $this->lastname = $lastname;
+    }
+
+    public function getUserId(): ?int {
+        return $this->userId;
     }
 
     public function getEmail():string {
@@ -36,28 +40,4 @@ class User {
     public function getLastname():string {
         return $this->lastname;
     }
-
-    public function getUserId() {
-        return $this->userId;
-    }
-
-    public function setEmail(string $email) {
-        $this->email = $email;
-    }
-
-    public function setPassword(string $password) {
-        $this->password = $password;
-    }
-
-    public function setFirstname(string $firstname) {
-        $this->firstname = $firstname;
-    }
-
-    public function setLastname(string $lastname) {
-        $this->lastname = $lastname;
-    }
-
-    // TODO: delete unnecessary methods
 }
-
-?>

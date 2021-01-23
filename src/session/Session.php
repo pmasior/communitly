@@ -4,7 +4,6 @@ require_once __DIR__ . '/../session/AutoLogin.php';
 require_once __DIR__ . '/../repository/UserRepository.php';
 
 class Session {
-    private $userRepository;
 
     public function handleSession($redirectIfNotLogged) {
         session_start();

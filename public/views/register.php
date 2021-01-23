@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/public/css/login-style.css">
-    <script type="text/javascript" src="/public/js/script.js" defer></script>
+    <script type="text/javascript" src="/public/js/form_validation.js" defer></script>
     <title>Communitly - login</title>
 </head>
 <body>
@@ -16,7 +16,7 @@
     </div>
     <div class="login-container">
         <form action="signUp" method="post">
-            <input class="input-with-text" type="text" name='email' placeholder="Login" value="example@example.com" autofocus>  <!-- TODO: delete value -->
+            <input class="input-with-text" type="text" name='email' placeholder="Login" autofocus>
             <input class="input-with-text" type="password" name="password" placeholder="Password">
             <input class="input-with-text" type="password" name="confirmedPassword" placeholder="Confirm password">
             <input class="input-with-text" type="text" name="firstName" placeholder="First name">

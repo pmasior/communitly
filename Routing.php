@@ -1,6 +1,7 @@
 <?php
 require_once 'src/controllers/DefaultController.php';
 require_once 'src/controllers/GroupController.php';
+require_once 'src/controllers/LinkController.php';
 require_once 'src/controllers/SecurityController.php';
 require_once 'src/controllers/SettingsController.php';
 require_once 'src/controllers/SettingsModificationController.php';
@@ -23,7 +24,7 @@ class Routing {
         $action = $urlParts[0];
 
         if(!array_key_exists($action, self::$routes)) {
-            die("Wrong url!");  // TODO: 404
+            die("Wrong url!");
         }
 
         $controllerClass = self::$routes[$action];
@@ -31,12 +32,7 @@ class Routing {
         $action = $action ?: 'index';
 
         $id = $urlParts[1] ?? '';
-        // if (strcmp($action, 'subgroup') == 0) {
-            // $object->$action(explode('/', $url)[1]);
-        // throw new Exception('debug' . explode('/', $url)[1] . 'debug');
-        // }
         $object->$action($id);
-
     }
 }
 

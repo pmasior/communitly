@@ -1,23 +1,20 @@
 <?php
 
 class File {
-    private $name;
-    private $type;
-    private $tmpName;
-    private $error;
-    private $size;
+    private string $name;
+    private string $type;
+    private string $tmpName;
+    private string $size;
 
     public function __construct(
         string $name,
         string $type, 
-        string $tmpName, 
-        ?string $error,  //TODO: usunąć error
+        string $tmpName,
         string $size
     ) {
         $this->name = $name;
         $this->type = $type;
         $this->tmpName = $tmpName;
-        $this->error = $error;
         $this->size = $size;
     }
 
@@ -33,12 +30,7 @@ class File {
         return $this->tmpName;
     }
 
-    public function getError(): string {
-        return $this->error;
-    }
-
     public function getSize(): string {
         return $this->size;
     }
 }
-?>
