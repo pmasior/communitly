@@ -38,6 +38,7 @@
 .statement-content {
     font-family: var(--font-family-regular);
     margin: 0.3rem 0;
+    white-space: pre-wrap;
 }
 
 textarea {
