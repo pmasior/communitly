@@ -34,8 +34,8 @@
             <div class="dialog js-dialog">
                 <h1>Dodawanie komunikatu</h1>
                 <h4>
-                    <span class="group-name"><?= $group->getFullName(); ?></span>
-                    <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
+                    <span class="group-name"><?= $openGroup->getFullName(); ?></span>
+                    <span class="subgroup"><a href=""><?= $openSubgroup->getFullName(); ?></a></span>
                 </h4>
                 <form action="/addStatement" method="post" enctype="multipart/form-data">
                     <input type="text" class='input-with-text' name='statementHeader' placeholder="Nagłówek">
@@ -66,8 +66,8 @@
                     <div class="dialog js-dialog">
                         <h1>Usuwanie komunikatu</h1>
                         <h4>
-                            <span class="group-name"><?= $group->getFullName(); ?></span>
-                            <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
+                            <span class="group-name"><?= $openGroup->getFullName(); ?></span>
+                            <span class="subgroup"><a href=""><?= $openSubgroup->getFullName(); ?></a></span>
                         </h4>
                         <p>Czy napewno chcesz usunać komunikat <?= $statement->getHeader(); ?>?</p>
                         <form action="/removeStatement" method="post" enctype="multipart/form-data">
@@ -150,8 +150,8 @@
             <div class="dialog js-dialog">
                 <h1>Dodawanie linku</h1>
                 <h4>
-                    <span class="group-name"><?= $group->getFullName(); ?></span>
-                    <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
+                    <span class="group-name"><?= $openGroup->getFullName(); ?></span>
+                    <span class="subgroup"><a href=""><?= $openSubgroup->getFullName(); ?></a></span>
                 </h4>
                 <form action="/addLink" method="post" enctype="multipart/form-data">
                     <input type="text" class='input-with-text' name='linkName' placeholder="Nazwa">
@@ -183,8 +183,8 @@
                         <div class="dialog js-dialog">
                             <h1>Usuwanie linku</h1>
                             <h4>
-                                <span class="group-name"><?= $group->getFullName(); ?></span>
-                                <span class="subgroup"><a href=""><?= $subgroup->getFullName(); ?></a></span>
+                                <span class="group-name"><?= $openGroup->getFullName(); ?></span>
+                                <span class="subgroup"><a href=""><?= $openSubgroup->getFullName(); ?></a></span>
                             </h4>
                             Czy napewno chcesz usunać link <?= $link->getTitle(); ?>?
                             <form action="/removeLink" method="post" enctype="multipart/form-data">

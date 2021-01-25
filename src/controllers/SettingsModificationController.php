@@ -86,11 +86,11 @@ class SettingsModificationController extends AppController {
 
     private function changePasswordIfExpected($userId, $realPassword, $oldPassword, $newPassword, $confirmedNewPassword) {
         if ($newPassword !== $confirmedNewPassword) {
-            $this->render('settings', ['messages' => ['Passwords are different']]);
+            (new SettingsController())->settings(['Passwords are different']);
             return;
         }
-        if ($oldPassword && $realPassword !== $oldPassword) {
-            $this->render('settings', ['messages' => ['Actual password is different']]);
+        if ($oldPassword && !password_verify($oldPassword, $realPassword)) {
+            (new SettingsController())->settings(['Actual password is different']);
             return;
         }
         if ($newPassword) {

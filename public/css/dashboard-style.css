@@ -35,6 +35,15 @@
     margin: 0.3rem 0;
 }
 
+.statement-content {
+    font-family: var(--font-family-regular);
+    margin: 0.3rem 0;
+}
+
+textarea {
+    height: 16.5em;
+}
+
 /* links */
 .record-in-links {
     padding: 0.2rem 0;

@@ -164,11 +164,13 @@ class StatementController extends AppController {
     }
 
     private function addAttachments($statementId) {
-        for ($i = 0; $i < count($_FILES['attachment']['tmp_name']); $i++) {
-            if ($_FILES['attachment']['error'][$i] == UPLOAD_ERR_OK) {
-                $file = $this->createFileInstance($i);
-                if ($this->moveFile($file)) {
-                    $attachmentId = $this->statementRepository->addAttachment($file, $statementId);
+        if ($_FILES['attachment']) {
+            for ($i = 0; $i < count($_FILES['attachment']['tmp_name']); $i++) {
+                if ($_FILES['attachment']['error'][$i] == UPLOAD_ERR_OK) {
+                    $file = $this->createFileInstance($i);
+                    if ($this->moveFile($file)) {
+                        $attachmentId = $this->statementRepository->addAttachment($file, $statementId);
+                    }
                 }
             }
         }
