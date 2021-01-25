@@ -1,0 +1,258 @@
+/* Style standaryzujące (niezgodności między przeglądarkami)
+ * -----------------------------------------------------
+ */
+
+input,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+input:invalid {
+    box-shadow: none;
+}
+
+
+
+/* Style podstawowe (punkt wyjścia do budowania bardziej wyspecjalizowanych stylów)
+ * -----------------------------------------------------
+ */
+
+:root {
+    --color-blue: #4d7cfe;
+    --color-error: #ea4335;
+    --color-warning: #da9c00;
+    --color-white: #ffffff;
+    --color-light: #dddddd;
+    --color-medium: #aaaaaa;
+    --color-dark: #555555;
+    --font-family-regular: Maven Pro, Noto Sans, Tahoma, Geneva, sans-serif;
+    --transition-delay: 200ms;
+}
+
+::selection {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Regular.woff2"),
+    url("/public/font/MavenPro-Regular.ttf")
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Medium.woff2"),
+    url("/public/font/MavenPro-Medium.ttf")
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Bold.woff2"),
+    url("/public/font/MavenPro-Bold.ttf")
+}
+
+@font-face {
+    font-family: "Nanum Pen Script";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Nanum Pen Script'),
+    url("/public/font/NanumPenScript-Regular.woff2"),
+    url("/public/font/NanumPenScript-Regular.ttf")
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    color: var(--color-dark);
+    font-family: var(--font-family-regular);
+    font-size: 1em;
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-delay);
+}
+
+input {
+    background: transparent;
+    border: none;
+    color: var(--color-dark);
+    margin-bottom: 1em;
+    padding: 10px;
+}
+
+
+
+
+/* Style komponentów i ich kontenerów
+ * -----------------------------------------------------
+ */
+
+.logo {
+    color: var(--color-white);
+    font: calc(4vw + 4vh + 2vmin) "Nanum Pen Script";
+}
+
+@media only screen and  (max-width: 768px) {
+    .logo {
+        font-size: 22vw;
+    }
+}
+
+form {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+
+    background-color: var(--color-white);
+    border-radius: 5px;
+    box-shadow: 0 0 15px 2px var(--color-light);
+    margin: auto;
+    padding: 1.5em;
+}
+
+.input-with-text {
+    border-bottom: 2px solid var(--color-light);
+    transition: border-bottom var(--transition-delay);
+    width: 100%;
+}
+
+.input-with-text:focus {
+    border-bottom-color: var(--color-blue);
+}
+
+.button {
+    background: transparent;
+    border: 2px solid var(--color-blue);
+    border-radius: 5px;
+    color: var(--color-blue);
+    cursor: pointer;
+    font-weight: 500;
+    margin: 0;
+    padding: 0.75em 3.5em;
+    transition: background var(--transition-delay),
+                color var(--transition-delay);
+    width: auto;
+}
+
+.button:hover {
+    background: var(--color-blue);
+    color: var(--color-white);
+}
+
+.button-in-form {
+    align-self: flex-end;
+}
+
+.header-login-button {
+    border-color: var(--color-white);
+    color: var(--color-white);
+}
+
+.header-login-button:hover {
+    background: var(--color-white);
+    color: var(--color-blue);
+}
+
+.error {
+    color: var(--color-error);
+    padding: 0.5em 0;
+}
+
+
+
+
+/* Style strukturalne (układ strony)
+ * -----------------------------------------------------
+ */
+
+body {
+    background: var(--color-blue);
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "logo-container login-container";
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 5rem auto;
+    height: 100vh;
+    width: 100vw;
+}
+
+@media only screen and  (max-width: 768px) {
+    body {
+        grid-template-areas:
+            "header"
+            "logo-container"
+            "login-container";
+        grid-template-columns: 1fr;
+        grid-auto-rows: 5rem auto auto;
+    }
+}
+
+header {
+    align-items: center;
+    display: flex;
+    justify-content: flex-end;
+    grid-area: header;
+    padding: 1rem;
+}
+
+.logo-container {
+    grid-area: logo-container;
+}
+
+.login-container {
+    grid-area: login-container;
+}
+
+.logo-container,
+.login-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.logo,
+form {
+    min-width: 20rem;
+    width: 25vw;
+}
+
+@media only screen and  (max-width: 768px) {
+    .logo,
+    form {
+        width: 90%;
+    }
+}
+
+
+
+
+/* Style narzędziowe (JS)
+ * -----------------------------------------------------
+ */
+
+.js-input-invalid,
+.js-input-invalid:focus {
+    border-bottom-color: var(--color-error);
+}

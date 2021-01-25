@@ -1,0 +1,455 @@
+/* Style standaryzujące (niezgodności między przeglądarkami)
+ * -----------------------------------------------------
+ */
+
+input,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+input:invalid {
+    box-shadow: none;
+}
+
+
+
+/* Style podstawowe (punkt wyjścia do budowania bardziej wyspecjalizowanych stylów)
+ * -----------------------------------------------------
+ */
+
+:root {
+    --color-blue: #4d7cfe;
+    --color-error: #ea4335;
+    --color-warning: #da9c00;
+    --color-white: #ffffff;
+    --color-light: #dddddd;
+    --color-medium: #aaaaaa;
+    --color-dark: #555555;
+    --font-family-regular: Maven Pro, Noto Sans, Tahoma, Geneva, sans-serif;
+    --font-awesome: "Font Awesome 5 Free";
+    --transition-delay: 200ms;
+}
+
+::selection {
+    background-color: var(--color-blue);
+    color: var(--color-white);
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Regular.woff2"),
+    url("/public/font/MavenPro-Regular.ttf")
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 500;
+    font-display: swap;
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Medium.woff2"),
+    url("/public/font/MavenPro-Medium.ttf")
+}
+
+@font-face {
+    font-family: "Maven Pro";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Maven Pro'),
+    url("/public/font/MavenPro-Bold.woff2"),
+    url("/public/font/MavenPro-Bold.ttf")
+}
+
+@font-face {
+    font-family: "Nanum Pen Script";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Nanum Pen Script'),
+    url("/public/font/NanumPenScript-Regular.woff2"),
+    url("/public/font/NanumPenScript-Regular.ttf")
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+body {
+    color: var(--color-dark);
+    font-family: var(--font-family-regular);
+    font-size: 1em;
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--color-blue);
+    font-weight: 500;
+    margin: 0;
+}
+
+p {
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-delay);
+}
+
+a:active,
+a:focus,
+a:hover {
+    color: var(--color-blue);
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+input,
+textarea {
+    background: transparent;
+    border: none;
+    color: var(--color-dark);
+    margin-bottom: 1em;
+    padding: 10px;
+}
+
+input[type="checkbox"] {
+    margin: initial;
+    padding: initial;
+}
+
+
+
+
+/* Style komponentów i ich kontenerów
+ * -----------------------------------------------------
+ */
+
+* > .fa-hover-show,
+*:hover > .fa-hover-hidden {
+    display: none;
+}
+
+*:hover > .fa-hover-show {
+    display: inline-block;
+}
+
+
+/* header */
+.logo {
+    color: var(--color-blue);
+    font: 3.2vw 'Nanum Pen Script';
+}
+
+@media only screen and (max-width: 768px) {
+    .logo {
+        font-size: 2rem;
+    }
+}
+
+
+/* navigation */
+.header-and-nav {
+    background: var(--color-white);
+    border-right: 1px solid var(--color-light);
+}
+
+@media only screen and (max-width: 768px) {
+    .header-and-nav {
+        border-right: none;
+        border-bottom: 1px solid var(--color-light);
+    }
+}
+
+.hamburger-menu-icon {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .hamburger-menu-icon {
+        border: none;
+        background: none;
+        display: inline;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .nav-menu {
+        background: var(--color-white);
+        border-right: 1px solid var(--color-light);
+        box-shadow: 0 0 15px 2px var(--color-light);
+        transition: transform var(--transition-delay);
+    }
+}
+
+
+/* menu-links */
+.menu-link {
+    display: inline-block;
+    padding: 0.2rem 0;
+}
+
+.menu-link.account {
+    margin-top: 1.5rem;
+}
+
+.menu-group {
+    color: var(--color-medium);
+    display: inline-block;
+    font-weight: 500;
+    padding-bottom: 0.2rem;
+    padding-top: 1.5rem;
+}
+
+/* main */
+
+.main-title {
+    font-size: 1.25vw;
+}
+
+@media only screen and (max-width: 768px) {
+    .main-title {
+        font-size: 1rem;
+    }
+}
+
+/* widget */
+.widget {
+    border-radius: 5px;
+    box-shadow: 0 0 15px 2px var(--color-light);
+    padding: 1rem;
+}
+
+.widget-group {
+    color: var(--color-medium);
+}
+
+.widget-group-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+
+/* form */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-with-text {
+    border-bottom: 2px solid var(--color-light);
+    transition: border-bottom var(--transition-delay);
+    width: 100%;
+}
+
+.input-with-text:focus {
+    border-bottom-color: var(--color-blue);
+}
+
+.button {
+    background: transparent;
+    border: 2px solid var(--color-blue);
+    border-radius: 5px;
+    color: var(--color-blue);
+    cursor: pointer;
+    font-weight: 500;
+    margin: 0;
+    padding: 0.75em 3.5em;
+    transition: background var(--transition-delay),
+                color var(--transition-delay);
+    width: auto;
+}
+
+.button:hover {
+    background: var(--color-blue);
+    color: var(--color-white);
+}
+
+.button-in-form {
+    align-self: flex-end;
+}
+
+.checkbox-in-form {
+    width: min-content;
+}
+
+
+/* dialog */
+.dialog-background {
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    transition: opacity var(--transition-delay);
+}
+
+.dialog {
+    background: var(--color-white);
+    border-radius: 5px;
+    box-shadow: 0 0 15px 2px var(--color-light);
+    padding: 1.5rem;
+}
+
+
+
+/* Style strukturalne (układ strony)
+ * -----------------------------------------------------
+ */
+
+body {
+    display: grid;
+    grid-template-areas:
+        "header-and-nav main";
+    grid-template-columns: 1fr 5fr;
+}
+
+@media only screen and (max-width: 768px) {
+    body {
+        grid-template-areas:
+            "header-and-nav"
+            "main";
+        grid-template-columns: 1fr;
+    }
+}
+
+.header-and-nav {
+    display: grid;
+    grid-area: header-and-nav;
+    grid-template-areas:
+        "logo"
+        "nav";
+    grid-template-rows: min-content auto;
+    height: 100vh;
+    position: sticky;
+    right: 0;
+    top: 0;
+}
+
+@media only screen and (max-width: 768px) {
+    .header-and-nav {
+        grid-template-areas:
+            "nav logo";
+        grid-template-columns: min-content auto;
+        height: auto;
+    }
+}
+
+header {
+    padding: 2rem 2rem 0 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+    header {
+        padding: 0;
+        align-self: center;
+    }
+}
+
+nav {
+    grid-area: nav;
+    padding: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+    nav {
+        padding: 1rem;
+    }
+}
+
+.logo {
+    grid-area: logo;
+}
+
+.gap {
+    flex-grow: 1;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    .nav-menu {
+        height : 100vh;
+        overflow-y: auto;
+        padding: 2rem;
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: translateX(-100vw);
+        width: 80vw;
+        z-index: 1;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .hamburger-menu-icon:focus ~ .nav-menu,
+    .nav-menu:hover {
+        transform: translateX(0);
+    }
+}
+
+
+/* dialog */
+.dialog-background {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+.dialog {
+    display: none;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+}
+
+@media only screen and (max-width: 768px) {
+    .dialog {
+        width: 90vw;
+    }
+}
+
+
+
+
+/* Style narzędziowe (JS)
+ * -----------------------------------------------------
+ */
+
+.js-input-invalid,
+.js-input-invalid:focus {
+    border-bottom-color: var(--color-error);
+}
+
+.js-show-dialog {
+    display: block;
+}
+
+.js-show-dialog-background {
+    visibility: visible;
+    opacity: 1;
+}

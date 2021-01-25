@@ -1,0 +1,116 @@
+
+/* Style komponentów i ich kontenerów
+ * -----------------------------------------------------
+ */
+
+.group-list {
+    line-height: 1.4rem;
+    list-style-type: disc;
+    margin: 0;
+    padding-left: 1rem;
+}
+
+.action-button {
+    float: right;
+}
+
+@media only screen and (max-width: 768px) {
+    .settings-widget {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .action-button {
+        margin-top: 1rem;
+        order: 1;
+        text-align: center;
+        width: 100%;
+
+    }
+}
+
+
+/* Style strukturalne (układ strony)
+ * -----------------------------------------------------
+ */
+
+main {
+    display: grid;
+    gap: 1rem 3rem;
+    grid-area: main;
+    grid-template-areas:
+        "main-title main-title"
+        "settings-for-account settings-for-account"
+        "settings-for-user-groups settings-for-user-identities"
+        "settings-for-administrated-groups settings-for-user-identities";
+    grid-template-columns: 2fr 2fr;
+    grid-auto-rows: min-content;
+    padding: 2rem;
+}
+
+@media only screen and (max-width: 768px) {
+    main {
+        grid-template-areas:
+            "main-title"
+            "settings-for-account"
+            "settings-for-user-groups"
+            "settings-for-administrated-groups"
+            "settings-for-user-identities";
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, min-content);
+        padding: 1rem;
+    }
+}
+
+.main-title {
+    grid-area: main-title;
+}
+
+.settings-for-account {
+    display: flex;
+    flex-direction: column;
+    grid-area: settings-for-account;
+    row-gap: 1rem;
+}
+
+.settings-for-user-groups {
+    display: flex;
+    flex-direction: column;
+    grid-area: settings-for-user-groups;
+    row-gap: 1rem;
+}
+
+.settings-for-user-identities {
+    display: flex;
+    flex-direction: column;
+    grid-area: settings-for-user-identities;
+    row-gap: 1rem;
+}
+
+.settings-for-administrated-groups {
+    display: flex;
+    flex-direction: column;
+    grid-area: settings-for-administrated-groups;
+    row-gap: 1rem;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    grid-area: links;
+    row-gap: 1rem;
+}
+
+
+
+
+/* Style narzędziowe (JS)
+ * -----------------------------------------------------
+ */
+
+
+
+
+/* Style charakterystyczne dla przeglądarek
+ * -----------------------------------------------------
+ */
